@@ -27,43 +27,19 @@ public class Visit {
         return date;
     }
 
-    public void setDate(String date){
-        this.date = date;
-    }
-
     public String getTime(){
         return time;
-    }
-
-    public void setTime(String time){
-        this.time = time;
     }
 
     public int getMaxVisitors(){
         return maxVisitors;
     }
 
-    public void setMaxVisitors(int maxVisitors){
-        this.maxVisitors = maxVisitors;
-    }
-
     public float getPrice(){
         return price;
     }
 
-    public void setPrice(float price){
-        this.price = price;
-    }
-
     public ArrayList<Itinerary> getItineraries(){
         return itineraries;
-    }
-
-    public void addItinerary(Itinerary itinerary){
-        itineraries.add(itinerary);
-    }
-
-    public void removeItinerary(Itinerary itinerary){
-        itineraries.remove(itinerary);
     }
 }

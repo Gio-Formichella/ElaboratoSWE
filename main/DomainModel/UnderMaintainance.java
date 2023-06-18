@@ -8,6 +8,10 @@ public class UnderMaintainance implements ArtworkStatus{
         this.estimatedCompletion = estimatedCompletion;
     }
 
+    public UnderMaintainance(UnderMaintainance status) {
+        this.estimatedCompletion = status.getEstimatedCompletion();
+    }
+
     public String getEstimatedCompletion() {
         return estimatedCompletion;
     }
@@ -17,7 +21,7 @@ public class UnderMaintainance implements ArtworkStatus{
     }
 
     public String getStatus() {
-        return "Under Maintainance";
+        return "Under Maintainance until " + estimatedCompletion;
     }
 
 }
