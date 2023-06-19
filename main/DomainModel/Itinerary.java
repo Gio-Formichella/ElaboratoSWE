@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Itinerary {
     private int id;
-    private ArrayList<Artwork<ArtworkStatus>> artworks;
+    private ArrayList<Artwork> artworks;
 
     
-    public Itinerary(int id, ArrayList<Artwork<ArtworkStatus>> artworks) {
+    public Itinerary(int id, ArrayList<Artwork> artworks) {
         this.id = id;
         this.artworks = artworks;
     }
@@ -16,7 +16,7 @@ public class Itinerary {
         return id;
     }
 
-    public ArrayList<Artwork<ArtworkStatus>> getArtworks() {
+    public ArrayList<Artwork> getArtworks() {
         return artworks;
     }
 }
