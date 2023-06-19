@@ -8,10 +8,6 @@ public class OnLoan implements ArtworkStatus{
         this.borrowingMuseum = borrowingMuseum;
     }
 
-    public OnLoan(OnLoan status) {
-        this.borrowingMuseum = status.getBorrowingMuseum();
-    }
-
     public String getBorrowingMuseum() {
         return borrowingMuseum;
     }
