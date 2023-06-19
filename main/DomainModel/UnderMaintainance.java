@@ -17,7 +17,7 @@ public class UnderMaintainance implements ArtworkStatus{
     }
 
     public String getStatus() {
-        return "Under Maintainance";
+        return "Under Maintainance until " + estimatedCompletion;
     }
 
 }

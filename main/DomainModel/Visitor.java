@@ -1,4 +1,3 @@
-//define a class for the DomainModel package
 package main.DomainModel;
 
 class Visitor{

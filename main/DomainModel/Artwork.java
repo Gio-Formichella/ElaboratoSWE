@@ -28,4 +28,6 @@ public class Artwork {
     public String getStatus() {
         return status.getStatus();
     }
+
+    
 }

@@ -17,7 +17,7 @@ public class OnLoan implements ArtworkStatus{
     }
 
     public String getStatus() {
-        return "On Loan";
+        return "On Loan for " + borrowingMuseum;
     }
 
 }
