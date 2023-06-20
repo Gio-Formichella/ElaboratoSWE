@@ -1,4 +1,4 @@
-package orm;
+package main.orm;
 
 import java.sql.*;
 
