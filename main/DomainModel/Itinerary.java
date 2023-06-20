@@ -19,6 +19,10 @@ public class Itinerary {
         return id;
     }
 
+    public String getName(){
+        return name;
+    }
+
     public ArrayList<Artwork> getArtworks() {
         return artworks;
     }
