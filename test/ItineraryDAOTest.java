@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ItineraryDAOTest {
 
     @Test
-    void insert() {
+    void testInsert() {
         Itinerary i = new Itinerary(89, "Egitto", new ArrayList<>());
         ItineraryDAO dao = new ItineraryDAO();
         try {
@@ -35,8 +35,7 @@ public class ItineraryDAOTest {
             }
         }
     }
-
     @Test
-    public void delete() {
+    public void testDelete() {
     }
 }
