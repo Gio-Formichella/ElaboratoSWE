@@ -26,4 +26,8 @@ public class Itinerary {
     public ArrayList<Artwork> getArtworks() {
         return artworks;
     }
+
+    public void addArtwork(Artwork a){
+        artworks.add(a);
+    }
 }
