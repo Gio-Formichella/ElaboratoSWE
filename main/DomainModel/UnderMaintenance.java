@@ -1,10 +1,10 @@
 package main.DomainModel;
 
-public class UnderMaintainance implements ArtworkStatus{
+public class UnderMaintenance implements ArtworkStatus{
     
     private String estimatedCompletion;
 
-    public UnderMaintainance(String estimatedCompletion) {
+    public UnderMaintenance(String estimatedCompletion) {
         this.estimatedCompletion = estimatedCompletion;
     }
 
