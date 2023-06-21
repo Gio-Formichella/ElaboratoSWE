@@ -43,30 +43,45 @@ public class ItineraryDAO {
 
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "SELECT id, Itinerary.name i_name, code, Artwork.name a_name, artist author, status, payload FROM Itinerary, Artwork_Itinerary, Artwork WHERE id = ? , Artwork_Itinerary.itinerary = id, code = Artwork_Itinerary.artwork";
+        String sql = """
+                SELECT id, itinerary.name as i_name, code, artwork.name as a_name, artist as author, status, payload
+                FROM (Itinerary left join Artwork_Itinerary on id=itinerary) left join Artwork on artwork = code
+                WHERE id = ?""";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
 
+        Itinerary i = null;
         ArrayList<Artwork> artworks = new ArrayList<>();
-        while (rs.next()) {
-            ArtworkStatus as = null;
-            switch (rs.getInt("status")) {
-                //status integers defined in DB
-                case 1:
-                    as = new OnDisplay();
-                    break;
-                case 2:
-                    as = new UnderMaintainance(rs.getString("payload"));
-                    break;
-                case 3:
-                    as = new OnLoan(rs.getString("payload"));
-                    break;
-            }
-            Artwork a = new Artwork(rs.getInt("code"), rs.getString("a_name"), rs.getString("author"), as);
-            artworks.add(a);
-        }
 
-        return new Itinerary(rs.getInt("id"), rs.getString("i_name"), artworks);
+        //Query result can be: no tuple, single tuple with empty attributes for artwork and full for itinerary,
+        // one or more tuples with both itinerary and artwork attributes full
+        if (rs.next()) {  //requested itinerary exists
+            int i_id = rs.getInt("id");
+            String i_name = rs.getString("i_name");
+            if (rs.getInt("status") != 0) { //itinerary has at least one artwork
+                rs.previous(); //moves cursor to the start
+                while (rs.next()) {
+                    int code = rs.getInt("code");
+                    String a_name = rs.getString("a_name");
+                    String author = rs.getString("author");
+
+                    ArtworkStatus as = null;
+                    switch (rs.getInt("status")) {
+                        case 1:
+                            as = new OnDisplay();
+                            break;
+                        case 2:
+                            as = new UnderMaintenance(rs.getString("payload"));
+                            break;
+                        case 3:
+                            as = new OnLoan(rs.getString("payload"));
+                    }
+                    artworks.add(new Artwork(code, a_name, author, as));
+                }
+            }
+            i = new Itinerary(i_id, i_name, artworks);
+        }
+        return i;
     }
 }
