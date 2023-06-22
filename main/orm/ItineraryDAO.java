@@ -76,6 +76,7 @@ public class ItineraryDAO {
                             break;
                         case 3:
                             as = new OnLoan(rs.getString("payload"));
+                            break;
                     }
                     artworks.add(new Artwork(code, a_name, author, as));
                 }
