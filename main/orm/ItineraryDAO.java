@@ -21,6 +21,7 @@ public class ItineraryDAO {
         ps.close();
     }
 
+    //deletes itinerary and associations with artworks
     public void delete(Itinerary i) throws SQLException {
         Connection con = ConnectionManager.getConnection();
 
@@ -83,5 +84,18 @@ public class ItineraryDAO {
             i = new Itinerary(i_id, i_name, artworks);
         }
         return i;
+    }
+
+    //creates association between and itinerary and an artwork
+    public void addArtworkToItinerary(Itinerary i, Artwork a) throws SQLException{
+        Connection con = ConnectionManager.getConnection();
+
+        String sql = "INSERT INTO Artwork_Itinerary ( artwork, itinerary) VALUES ( ?, ?)";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, a.getCode());
+        ps.setInt(2, i.getId());
+
+        ps.executeUpdate();
+        ps.close();
     }
 }

@@ -1,12 +1,15 @@
 package test;
 
+import main.DomainModel.Artwork;
 import main.DomainModel.Itinerary;
+import main.DomainModel.OnDisplay;
 import main.orm.ConnectionManager;
 import main.orm.ItineraryDAO;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -59,6 +62,38 @@ public class ItineraryDAOTest {
                 ps1.executeUpdate();
                 ps1.close();
             } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    public void testAddArtworkToItinerary() {
+        Itinerary i = new Itinerary(999, "TestItinerary", new ArrayList<>());
+        Artwork a = new Artwork(999, "TestArtwork", "Gio", new OnDisplay());
+        ItineraryDAO dao = new ItineraryDAO();
+
+        //TODO artworkDAO deve inserire artwork in tabella artwork
+        try{
+            dao.addArtworkToItinerary(i, a);
+
+            //retrieving tuple
+            Connection con = ConnectionManager.getConnection();
+            String sql = "SELECT artwork, itinerary FROM artwork_itinerary WHERE itinerary = ? AND artwork = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, i.getId());
+            ps.setInt(2, a.getCode());
+            ResultSet rs = ps.executeQuery();
+
+            assertEquals(rs.getInt("itinerary"), i.getId());
+            assertEquals(rs.getInt("artwork"), a.getCode());
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            try{
+                dao.delete(i);
+                //TODO deve essere rimosso artwork
+            }catch (SQLException e){
                 e.printStackTrace();
             }
         }

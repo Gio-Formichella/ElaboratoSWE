@@ -17,7 +17,11 @@ public class Curator {
         dao.insert(i);
     }
 
-    public void addArtwork(Itinerary i, Artwork a){}
+    public void addArtwork(Itinerary i, Artwork a){
+        //TODO verifica se opera già esiste nel db, se non ancora esistente la crea
+        //TODO associa opera a itinerario
+        //TODO notifica dei newsletter subscribers
+    }
 
     public List<Artwork> viewArtworks(){
         return null;
