@@ -59,7 +59,7 @@ public class Curator {
             }
             a.setStatus(as);
             ArtworkDAO dao = new ArtworkDAO();
-            dao.updateState(a);
+            dao.updateStatus(a);
         }
     }
 
