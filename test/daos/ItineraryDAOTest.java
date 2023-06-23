@@ -3,6 +3,7 @@ package test.daos;
 import main.DomainModel.Artwork;
 import main.DomainModel.Itinerary;
 import main.DomainModel.OnDisplay;
+import main.orm.ArtworkDAO;
 import main.orm.ConnectionManager;
 import main.orm.ItineraryDAO;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,6 @@ public class ItineraryDAOTest {
 
         try {
             dao.insert(i);
-            //TODO metodo addArtwork(Artwork, Itinerary) aggiunge relazione opera itinerario, delete rimuove anche questa
             dao.delete(i);
             assertNull(dao.getTransitive(i.getId()));
         } catch (SQLException e) {
@@ -70,12 +70,14 @@ public class ItineraryDAOTest {
     @Test
     public void testAddArtworkToItinerary() {
         Itinerary i = new Itinerary(999, "TestItinerary", new ArrayList<>());
-        Artwork a = new Artwork(999, "TestArtwork", "Gio", new OnDisplay());
-        ItineraryDAO dao = new ItineraryDAO();
+        Artwork a = new Artwork(998, "TestArtwork", "Gio", new OnDisplay());
+        ItineraryDAO idao = new ItineraryDAO();
+        ArtworkDAO adao = new ArtworkDAO();
+        try {
+            adao.insert(a);
+            idao.insert(i);
 
-        //TODO artworkDAO deve inserire artwork in tabella artwork
-        try{
-            dao.addArtworkToItinerary(i, a);
+            idao.addArtworkToItinerary(i, a);
 
             //retrieving tuple
             Connection con = ConnectionManager.getConnection();
@@ -84,16 +86,16 @@ public class ItineraryDAOTest {
             ps.setInt(1, i.getId());
             ps.setInt(2, a.getCode());
             ResultSet rs = ps.executeQuery();
-
+            rs.next();
             assertEquals(rs.getInt("itinerary"), i.getId());
             assertEquals(rs.getInt("artwork"), a.getCode());
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            try{
-                dao.delete(i);
-                //TODO deve essere rimosso artwork
-            }catch (SQLException e){
+        } finally {
+            try {
+                idao.delete(i);
+                adao.delete(a);
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }

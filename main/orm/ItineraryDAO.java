@@ -25,18 +25,18 @@ public class ItineraryDAO {
     public void delete(Itinerary i) throws SQLException {
         Connection con = ConnectionManager.getConnection();
 
-        String sql1 = "DELETE FROM Itinerary WHERE id = ?";
-        PreparedStatement ps1 = con.prepareStatement(sql1);
-        ps1.setInt(1, i.getId());
-        ps1.executeUpdate();
-        ps1.close();
-
         //removes association with artworks
         String sql2 = "DELETE FROM Artwork_Itinerary WHERE itinerary = ?";
         PreparedStatement ps2 = con.prepareStatement(sql2);
         ps2.setInt(1, i.getId());
         ps2.executeUpdate();
         ps2.close();
+
+        String sql1 = "DELETE FROM Itinerary WHERE id = ?";
+        PreparedStatement ps1 = con.prepareStatement(sql1);
+        ps1.setInt(1, i.getId());
+        ps1.executeUpdate();
+        ps1.close();
     }
 
     public Itinerary getTransitive(int id) throws SQLException {
@@ -88,7 +88,7 @@ public class ItineraryDAO {
     }
 
     //creates association between and itinerary and an artwork
-    public void addArtworkToItinerary(Itinerary i, Artwork a) throws SQLException{
+    public void addArtworkToItinerary(Itinerary i, Artwork a) throws SQLException {
         Connection con = ConnectionManager.getConnection();
 
         String sql = "INSERT INTO Artwork_Itinerary ( artwork, itinerary) VALUES ( ?, ?)";
