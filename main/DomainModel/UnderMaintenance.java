@@ -8,6 +8,14 @@ public class UnderMaintenance implements ArtworkStatus{
         this.estimatedCompletion = estimatedCompletion;
     }
 
+    public UnderMaintenance(UnderMaintenance as){
+        this.estimatedCompletion = as.estimatedCompletion;
+    }
+    @Override
+    public UnderMaintenance copy() {
+        return new UnderMaintenance(this);
+    }
+
     public String getEstimatedCompletion() {
         return estimatedCompletion;
     }

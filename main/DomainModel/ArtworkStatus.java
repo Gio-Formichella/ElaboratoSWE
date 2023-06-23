@@ -2,6 +2,8 @@ package main.DomainModel;
 
 public interface ArtworkStatus {
 
-    public String getStatus();
+    String getStatus();
 
+    //defensive copy method
+    ArtworkStatus copy();
 }
