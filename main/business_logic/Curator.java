@@ -48,7 +48,8 @@ public class Curator {
             if(a.getArtworkStatusObject().getClass() == OnDisplay.class){
                 //opera passa ad uno stato non visibile
                 //TODO metodo transitive che fornisce visitatori interessati
-                ArrayList<Visitor> visitors = null;
+                VisitorDAO dao = new VisitorDAO();
+                ArrayList<Visitor> visitors = dao.getToBeNotifiedVisitors(a);
                 //TODO metodo di email ai visitatori
             }
             else if(as.getClass() == OnDisplay.class){

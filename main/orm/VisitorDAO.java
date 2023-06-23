@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
 import main.DomainModel.*;
 
 public class VisitorDAO {
@@ -16,7 +17,7 @@ public class VisitorDAO {
         PreparedStatement ps = con.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
-        while(rs.next()){
+        while (rs.next()) {
             String email = rs.getString("email");
             String name = rs.getString("name");
             String surname = rs.getString("surname");
@@ -24,5 +25,26 @@ public class VisitorDAO {
         }
 
         return nlsubscribers;
+    }
+
+    public ArrayList<Visitor> getToBeNotifiedVisitors(Artwork a) throws SQLException {
+        //returns visitors whose visit would include given artwork
+
+        Connection con = ConnectionManager.getConnection();
+
+        String sql = "SELECT email, Visitor.name as name, surname, newsletter FROM artwork_itinerary as at, visit_booking as vb, booking_visitor as bv, visitor WHERE artwork = ? AND at.itinerary = visit_itinerary AND vb.booking = bv.booking and bv.visitor=email";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, a.getCode());
+        ResultSet rs = ps.executeQuery();
+
+        ArrayList<Visitor> visitors = new ArrayList<>();
+        while (rs.next()) {
+            String email = rs.getString("email");
+            String name = rs.getString("name");
+            String surname = rs.getString("surname");
+            boolean subscriber = rs.getBoolean("newsletter");
+            visitors.add(new Visitor(email, name, surname, subscriber));
+        }
+        return visitors;
     }
 }
