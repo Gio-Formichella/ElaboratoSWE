@@ -1,6 +1,6 @@
 package main.DomainModel;
 
-class Visitor{
+public class Visitor{
     private String name;
     private String surname;
     private String emailAddress;
