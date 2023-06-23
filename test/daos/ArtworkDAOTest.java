@@ -109,7 +109,7 @@ class ArtworkDAOTest {
     }
 
     @Test
-    void testGetAll() {
+    void getAll() {
         ArtworkDAO dao = new ArtworkDAO();
         try {
             assertEquals(dao.getAll().getClass(), ArrayList.class);

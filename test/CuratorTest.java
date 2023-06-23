@@ -1,15 +1,21 @@
 package test;
 
+import main.DomainModel.Artwork;
 import main.DomainModel.Itinerary;
+import main.DomainModel.OnDisplay;
 import main.business_logic.Curator;
+import main.orm.ArtworkDAO;
+import main.orm.ConnectionManager;
 import main.orm.ItineraryDAO;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CuratorTest {
 
@@ -40,10 +46,49 @@ class CuratorTest {
     }
     @Test
     void addArtwork() {
+        Curator c = new Curator();
+        Itinerary i = new Itinerary(-1, "TestItinerary", new ArrayList<>());
+        Artwork a = new Artwork(-1, "TestArtwork", "Gio", new OnDisplay());
+        Artwork a2 = new Artwork(-2, "TestArtwork", "Gio", new OnDisplay() );
+        try{
+            ItineraryDAO dao = new ItineraryDAO();
+            dao.insert(i);
+
+            c.addArtwork(i,a);
+            c.addArtwork(i, a2);
+            assertEquals(i.getArtworks().size(), 2);
+
+            //retrieving association tuples
+            Connection con = ConnectionManager.getConnection();
+            String sql = "SELECT count(artwork) as count FROM artwork_itinerary WHERE itinerary = ? ";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, i.getId());
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            assertEquals(rs.getInt("count"), 2);
+        }catch (SQLException e){
+            e.printStackTrace();
+        } finally {
+            try {
+                ItineraryDAO dao = new ItineraryDAO();
+                dao.delete(i);
+                ArtworkDAO adao = new ArtworkDAO();
+                adao.delete(a);
+                adao.delete(a2);
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     @Test
     void viewArtworks() {
+        Curator c = new Curator();
+        try{
+            assertEquals(c.viewArtworks().getClass(), ArrayList.class);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -52,5 +97,23 @@ class CuratorTest {
 
     @Test
     void cancelItinerary() {
+        Curator c = new Curator();
+        Itinerary i = new Itinerary(-1, "TestItinerary", new ArrayList<>());
+        try{
+            c.addItinerary(i.getId(), i.getName());
+            c.cancelItinerary(i);
+
+            ItineraryDAO dao = new ItineraryDAO();
+            assertNull(dao.getTransitive(i.getId()));
+        }catch (SQLException e){
+            e.printStackTrace();
+        }finally {
+            try{
+                ItineraryDAO dao = new ItineraryDAO();
+                dao.delete(i);
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
     }
 }

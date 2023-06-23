@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ItineraryDAOTest {
 
     @Test
-    void testInsert() {
+    void insert() {
         Itinerary i = new Itinerary(89, "Egitto", new ArrayList<>());
         ItineraryDAO dao = new ItineraryDAO();
         try {
@@ -43,7 +43,7 @@ public class ItineraryDAOTest {
     }
 
     @Test
-    public void testDelete() {
+    public void delete() {
         ItineraryDAO dao = new ItineraryDAO();
         Itinerary i = new Itinerary(2, "RomaAntica", new ArrayList<>());
 
@@ -68,7 +68,7 @@ public class ItineraryDAOTest {
     }
 
     @Test
-    public void testAddArtworkToItinerary() {
+    public void addArtworkToItinerary() {
         Itinerary i = new Itinerary(999, "TestItinerary", new ArrayList<>());
         Artwork a = new Artwork(998, "TestArtwork", "Gio", new OnDisplay());
         ItineraryDAO idao = new ItineraryDAO();
