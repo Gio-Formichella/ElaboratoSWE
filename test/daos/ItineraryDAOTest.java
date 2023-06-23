@@ -1,4 +1,4 @@
-package test;
+package test.daos;
 
 import main.DomainModel.Artwork;
 import main.DomainModel.Itinerary;

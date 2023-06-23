@@ -1,4 +1,4 @@
-package test;
+package test.daos;
 
 import main.DomainModel.Artwork;
 import main.DomainModel.OnDisplay;
@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,19 +21,19 @@ class ArtworkDAOTest {
     void get() {
         ArtworkDAO dao = new ArtworkDAO();
         Artwork a = new Artwork(1, "AnArtwork", "Gio", new OnDisplay());
-        try{
+        try {
             dao.insert(a);
             Artwork retrieved = dao.get(a.getCode());
             assertEquals(retrieved.getCode(), a.getCode());
             assertEquals(retrieved.getName(), a.getName());
             assertEquals(retrieved.getAuthor(), a.getAuthor());
             assertEquals(retrieved.getStatus(), a.getStatus());
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            try{
+        } finally {
+            try {
                 dao.delete(a);
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -41,11 +42,11 @@ class ArtworkDAOTest {
     @Test
     void insert() {
         ArtworkDAO dao = new ArtworkDAO();
-        Artwork a1 = new Artwork(-1,"FirstArtwork", "Gio1", new OnDisplay());
-        Artwork a2 = new Artwork(-2,"SecondArtwork", "Gio2", new UnderMaintenance("30/07/2023"));
-        Artwork a3 = new Artwork(-3,"ThirdArtwork", "Gio3", new OnLoan("Museo Pecci"));
+        Artwork a1 = new Artwork(-1, "FirstArtwork", "Gio1", new OnDisplay());
+        Artwork a2 = new Artwork(-2, "SecondArtwork", "Gio2", new UnderMaintenance("30/07/2023"));
+        Artwork a3 = new Artwork(-3, "ThirdArtwork", "Gio3", new OnLoan("Museo Pecci"));
 
-        try{
+        try {
             dao.insert(a1);
             dao.insert(a2);
             dao.insert(a3);
@@ -68,14 +69,14 @@ class ArtworkDAOTest {
             assertEquals(retrieved3.getAuthor(), a3.getAuthor());
             assertEquals(retrieved3.getStatus(), a3.getStatus());
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            try{
+        } finally {
+            try {
                 dao.delete(a1);
                 dao.delete(a2);
                 dao.delete(a3);
-            }catch (SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -85,15 +86,15 @@ class ArtworkDAOTest {
     void delete() {
         ArtworkDAO dao = new ArtworkDAO();
         Artwork a = new Artwork(1, "AnArtwork", "Gio", new OnDisplay());
-        try{
+        try {
             dao.insert(a);
             dao.delete(a);
 
             assertNull(dao.get(a.getCode()));
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
-        } finally{
-            try{
+        } finally {
+            try {
                 Connection con = ConnectionManager.getConnection();
 
                 String sql = "DELETE FROM Artwork WHERE code = ?";
@@ -101,9 +102,19 @@ class ArtworkDAOTest {
                 ps.setInt(1, a.getCode());
                 ps.executeUpdate();
                 ps.close();
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Test
+    void testGetAll() {
+        ArtworkDAO dao = new ArtworkDAO();
+        try {
+            assertEquals(dao.getAll().getClass(), ArrayList.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
