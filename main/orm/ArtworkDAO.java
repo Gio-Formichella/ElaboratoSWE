@@ -104,4 +104,27 @@ public class ArtworkDAO {
         }
         return artworks;
     }
+
+    public void updateStatus(Artwork a) throws SQLException {
+        Connection con = ConnectionManager.getConnection();
+
+        String sql = "UPDATE artwork set status = ?, payload = ? WHERE code = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(3, a.getCode());
+        ArtworkStatus as = a.getArtworkStatusObject();
+        if (as.getClass() == OnDisplay.class) {
+            ps.setInt(1, 1);
+            ps.setString(2, null);
+        } else if (as.getClass() == UnderMaintenance.class) {
+            ps.setInt(1, 2);
+            UnderMaintenance um = (UnderMaintenance) as;
+            ps.setString(2, um.getEstimatedCompletion());
+        } else if (as.getClass() == OnLoan.class) {
+            ps.setInt(1, 3);
+            OnLoan ol = (OnLoan) as;
+            ps.setString(2, ol.getBorrowingMuseum());
+        }
+        ps.executeUpdate();
+        ps.close();
+    }
 }

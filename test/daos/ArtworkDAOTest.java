@@ -117,4 +117,40 @@ class ArtworkDAOTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    void updateStatus() {
+        ArtworkDAO dao = new ArtworkDAO();
+        Artwork a = new Artwork(-1, "TestArtwork", "Gio", new OnDisplay());
+
+        try {
+            dao.insert(a);
+
+            UnderMaintenance um = new UnderMaintenance("11/07/2023");
+            a.setStatus(um);
+            dao.updateStatus(a);
+            Artwork retrieved = dao.get(a.getCode());
+            assertEquals(retrieved.getStatus(), a.getStatus());
+
+            OnLoan ol = new OnLoan("Collezione di Gio");
+            a.setStatus(ol);
+            dao.updateStatus(a);
+            Artwork retrieved2 = dao.get(a.getCode());
+            assertEquals(retrieved2.getStatus(), a.getStatus());
+
+            OnDisplay od = new OnDisplay();
+            a.setStatus(od);
+            dao.updateStatus(a);
+            Artwork retrieved3 = dao.get(a.getCode());
+            assertEquals(retrieved3.getStatus(), a.getStatus());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                dao.delete(a);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
