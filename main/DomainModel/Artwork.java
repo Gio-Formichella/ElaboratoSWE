@@ -29,5 +29,7 @@ public class Artwork {
         return status.getStatus();
     }
 
-    
+    public ArtworkStatus getArtworkStatusObject(){
+        return status.copy();
+    }
 }
