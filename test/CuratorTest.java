@@ -10,6 +10,7 @@ import main.orm.ConnectionManager;
 import main.orm.ItineraryDAO;
 import org.junit.jupiter.api.Test;
 
+import javax.mail.MessagingException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -68,7 +69,7 @@ class CuratorTest {
             ResultSet rs = ps.executeQuery();
             rs.next();
             assertEquals(rs.getInt("count"), 2);
-        } catch (SQLException e) {
+        } catch (SQLException | MessagingException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -111,7 +112,7 @@ class CuratorTest {
             assertEquals(a.getStatus(), um.getStatus());
             Artwork retrieved2 = dao.get(a.getCode());
             assertEquals(retrieved2.getStatus(), a.getStatus());
-        } catch (SQLException e) {
+        } catch (SQLException | MessagingException e) {
             e.printStackTrace();
         } finally {
             try {
