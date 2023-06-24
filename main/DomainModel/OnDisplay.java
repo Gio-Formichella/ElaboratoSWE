@@ -6,4 +6,8 @@ public class OnDisplay implements ArtworkStatus{
         return "On Display";
     }
 
+    @Override
+    public OnDisplay copy() {
+        return new OnDisplay();
+    }
 }

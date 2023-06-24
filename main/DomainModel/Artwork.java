@@ -1,5 +1,7 @@
 package main.DomainModel;
 
+import java.util.Objects;
+
 public class Artwork {
     private int code;
     private String name;
@@ -29,5 +31,15 @@ public class Artwork {
         return status.getStatus();
     }
 
-    
+    public ArtworkStatus getArtworkStatusObject(){
+        return status.copy();
+    }
+
+    public boolean setStatus(ArtworkStatus as){
+        if(!Objects.equals(status.getStatus(), as.getStatus())){
+            status = as;
+            return true;
+        }
+        return false; //returns false if new status is the same to the old one
+    }
 }
