@@ -3,6 +3,7 @@ package main.business_logic;
 import main.DomainModel.*;
 import main.orm.ArtworkDAO;
 import main.orm.ItineraryDAO;
+import main.orm.VisitDAO;
 import main.orm.VisitorDAO;
 
 import javax.mail.*;
@@ -149,6 +150,7 @@ public class Curator {
     public void cancelItinerary(Itinerary i) throws SQLException{
         ItineraryDAO dao = new ItineraryDAO();
         dao.delete(i);
+        VisitDAO vdao = new VisitDAO();
+        vdao.removeItineraryFromVisits(i.getId());//TODO should it also remove the itinerary from visits and notify nl subscribers like this?
     }
-
 }
