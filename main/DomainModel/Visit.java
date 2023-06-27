@@ -42,4 +42,12 @@ public class Visit {
     public ArrayList<Itinerary> getItineraries(){
         return itineraries;
     }
+
+
+
+
+
+    public void addItinerary(Itinerary i){
+        itineraries.add(i);
+    }
 }
