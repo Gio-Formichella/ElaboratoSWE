@@ -47,4 +47,33 @@ public class VisitorDAO {
         }
         return visitors;
     }
+
+
+    public ArrayList<Booking> getBooking(Visitor v) throws SQLException{
+        Connection con = ConnectionManager.getConnection();
+        String sql = "SELECT DISTINCT BV.booking as booking, B.paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter" +
+                "FROM Booking_Visitor as BV, Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B" +
+                "WHERE BV.visitor = VR.email AND VB.visit_code = V.code AND VB.visit_itinerary = V.itinerary AND BV.booking = VB.booking AND BV.visitor = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, v.getEmailAddress());
+        ResultSet rs = ps.executeQuery();
+
+        ArrayList<Booking> bookings = new ArrayList<>();
+        VisitDAO vDAO = new VisitDAO();
+        Visit visit = null;
+        while (rs.next()){
+            int booking = rs.getInt("booking");
+            boolean paid = rs.getBoolean("paid");
+            int visit_code = rs.getInt("visit");
+            String email = rs.getString("email");
+            String name = rs.getString("name");
+            String surname = rs.getString("surname");
+            boolean subscriber = rs.getBoolean("newsletter");
+            Visitor visitor = new Visitor(name, surname, email, subscriber);
+            visit = vDAO.getTransitive(visit_code);
+            bookings.add(new Booking(booking, paid, visit, visitor));
+        }
+        return bookings;
+    }
 }
+
