@@ -32,7 +32,10 @@ public class VisitorDAO {
 
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "SELECT email, Visitor.name as name, surname, newsletter FROM artwork_itinerary as at, visit_booking as vb, booking_visitor as bv, visitor WHERE artwork = ? AND at.itinerary = visit_itinerary AND vb.booking = bv.booking and bv.visitor=email";
+        String sql = """
+                SELECT email, name, surname, newsletter
+                FROM artwork_itinerary at, visit_itinerary vt, visit_booking vb, booking_visitor bv, visitor v
+                WHERE artwork = ? AND at.itinerary = vt.itinerary AND vt.visit = vb.visit AND vb.booking = bv.booking AND bv.visitor = v.email\s""";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, a.getCode());
         ResultSet rs = ps.executeQuery();
