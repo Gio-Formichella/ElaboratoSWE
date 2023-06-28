@@ -95,23 +95,24 @@ public class BookingDAO {
         ps2.close();
     }
 
-    public Booking get(int code) throws SQLException, ParseException {
+    public ArrayList<Booking> get(int code) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
         String sql = "SELECT DISTINCT B.paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter FROM Booking_Visitor as BV, Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B WHERE BV.visitor = VR.email AND VB.visit = V.code AND BV.booking = VB.booking AND BV.booking = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ResultSet rs = ps.executeQuery();
 
-        Booking b = null;
+        ArrayList<Booking> bookings = new ArrayList<>();
         VisitDAO vDAO = new VisitDAO();
         Visit visit = null;
+        Booking b = null;
         /*ArrayList<Artwork> artworks = new ArrayList<>();
         Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);*/
-        if (rs.next()) {
+        while (rs.next()) {
             boolean paid = rs.getBoolean("paid");
             int visit_code = rs.getInt("visit");
             String email = rs.getString("email");
@@ -122,8 +123,10 @@ public class BookingDAO {
             visit = vDAO.getTransitive(visit_code);
             //visit = new Visit(visit_code, "2020-01-01", "10:23:45", 120, 200,  itineraries);
             b = new Booking(code, paid, visit, visitor);
+            bookings.add(b);
+
         }
-        return b;
+        return bookings;
 
     }
 
@@ -157,5 +160,35 @@ public class BookingDAO {
         ps2.executeUpdate();
         ps2.close();
 
+    }
+
+    public String print(int code) throws SQLException, ParseException {
+        Connection con = ConnectionManager.getConnection();
+        String sql = "SELECT DISTINCT B.paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter FROM Booking_Visitor as BV, Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B WHERE BV.visitor = VR.email AND VB.visit = V.code AND BV.booking = VB.booking AND BV.booking = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, code);
+        ResultSet rs = ps.executeQuery();
+
+        ArrayList<Booking> bookings = new ArrayList<>();
+        VisitDAO vDAO = new VisitDAO();
+        Visit visit = null;
+        String ticket = null;
+        /*ArrayList<Artwork> artworks = new ArrayList<>();
+        Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
+        artworks.add(art);
+        ArrayList<Itinerary> itineraries = new ArrayList<>();
+        Itinerary it = new Itinerary(90, "Egitto", artworks);
+        itineraries.add(it);*/
+        while (rs.next()) {
+            boolean paid = rs.getBoolean("paid");
+            int visit_code = rs.getInt("visit");
+            String email = rs.getString("email");
+            String name = rs.getString("name");
+            String surname = rs.getString("surname");
+            visit = vDAO.getTransitive(visit_code);
+            //visit = new Visit(visit_code, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+            ticket = ticket + "Nome: "+ name + "Cognome: " + surname + "Email: " + email + "Codice prenotazione: " + visit_code + "Codice visita: " + visit.getCode() + "Data visita: " + visit.getDate() + "Orario visita: " + visit.getTime() + "Stato pagamento: " + paid + "\n";
+        }
+        return ticket;
     }
 }

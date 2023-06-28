@@ -1,9 +1,6 @@
 package main.business_logic;
 
-import main.DomainModel.Artwork;
-import main.DomainModel.Booking;
-import main.DomainModel.Itinerary;
-import main.DomainModel.Visitor;
+import main.DomainModel.*;
 import main.orm.ArtworkDAO;
 import main.orm.BookingDAO;
 import main.orm.ItineraryDAO;
@@ -20,9 +17,11 @@ public class VisitorController {
         return bdao.getBooking(v);
     }
 
-    public void cancelBooking(Booking b) throws SQLException{
+    public void cancelBooking(Booking b) throws SQLException, ParseException {
         BookingDAO dao = new BookingDAO();
-        dao.delete(b);
+        if(dao.get(b.getCode()) != null) {
+            dao.delete(b);
+        }
     }
 
     public ArrayList<Artwork> viewArtworks() throws SQLException{
@@ -38,5 +37,19 @@ public class VisitorController {
     public void UnsubscribeFromNewsletter(Visitor v) throws SQLException {
         VisitorDAO vdao = new VisitorDAO();
         vdao.cancelSubscriber(v);
+    }
+
+    public void bookVisit(Visit v, Visitor vr) throws SQLException{
+        BookingDAO bdao = new BookingDAO();
+        bdao.addVisit_Booking(v, vr);
+    }
+
+    public String printTicket(int code) throws SQLException, ParseException {
+        BookingDAO bdao = new BookingDAO();
+        if(bdao.get(code) != null) {
+            return bdao.print(code);
+        } else {
+            return null;
+        }
     }
 }
