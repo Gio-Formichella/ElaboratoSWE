@@ -60,13 +60,13 @@ public class BookingDAOTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(222, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
-        Booking b = new Booking(123, false, visit, visitor);
+        Booking b = new Booking(128, false, visit, visitor);
         try {
             dao.insert(b);
             dao.delete(b);
-            assertNull(dao.getBooking(visitor));
+            assertNull(dao.get(b.getCode()));
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException e) {
