@@ -108,37 +108,37 @@ public class Curator {
                     Transport.send(message);
                 }
             }
-            }
             else if(as.getClass() == OnDisplay.class){
                 //opera torna allo stato visibile
                 VisitorDAO dao = new VisitorDAO();
                 ArrayList<Visitor> nlsubscribers = dao.getNLSubscribers();
-                
-            //invio email
-            if (nlsubscribers.size()>0){
-                Properties properties = new Properties();
-                properties.put("mail.smtp.auth", "true");  //autenticazione user
-                properties.put("mail.smtp.host", "smtp.gmail.com");  //server smtp gmail
-                properties.put("mail.smtp.port", "587"); //numero di porta richiesto da gmail
-                properties.put("mail.smtp.starttls.enable", "true");
+                //TODO metodo di invio email
+                //invio email
+                if (nlsubscribers.size()>0) {
+                    Properties properties = new Properties();
+                    properties.put("mail.smtp.auth", "true");  //autenticazione user
+                    properties.put("mail.smtp.host", "smtp.gmail.com");  //server smtp gmail
+                    properties.put("mail.smtp.port", "587"); //numero di porta richiesto da gmail
+                    properties.put("mail.smtp.starttls.enable", "true");
 
-                Session session = Session.getInstance(properties, new Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(emailAddress, emailPassword);
+                    Session session = Session.getInstance(properties, new Authenticator() {
+                        @Override
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(emailAddress, emailPassword);
+                        }
+                    });
+
+                    Message message = new MimeMessage(session);
+                    message.setFrom(new InternetAddress(emailAddress));
+                    message.setSubject("Nuova opera");
+                    message.setText("L'opera " + a.getName() + " dell'autore " + a.getAuthor() + " è tornata allo stato visibile");
+
+                    for (Visitor subscriber : nlsubscribers) {
+                        Address addressTo = new InternetAddress(subscriber.getEmailAddress());
+                        message.addRecipient(Message.RecipientType.TO, addressTo);
                     }
-                });
-
-                Message message = new MimeMessage(session);
-                message.setFrom(new InternetAddress(emailAddress));
-                message.setSubject("Nuova opera");
-                message.setText("L'opera "+a.getName() +" dell'autore " + a.getAuthor() + " è tornata allo stato visibile");
-
-                for(Visitor subscriber : nlsubscribers){
-                    Address addressTo = new InternetAddress(subscriber.getEmailAddress());
-                    message.addRecipient(Message.RecipientType.TO, addressTo);
+                    Transport.send(message);
                 }
-                Transport.send(message);
             }
             a.setStatus(as);
             ArtworkDAO adao = new ArtworkDAO();
