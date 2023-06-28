@@ -95,16 +95,22 @@ public class BookingDAOTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(222, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
-        Booking b = new Booking(123, false, visit, visitor);
+        Booking b = new Booking(121, false, visit, visitor);
+        Booking b2 = new Booking(189, false, visit, visitor);
         try {
             dao.insert(b);
+            dao.insert(b2);
             ArrayList<Booking> retrieved = dao.getBooking(visitor);
-            assertEquals(retrieved.get(0).getCode(), b.getCode());
-            assertEquals(retrieved.get(0).getVisit(), b.getVisit());
-            assertEquals(retrieved.get(0).getVisitor(), b.getVisitor());
-            assertEquals(retrieved.get(0).isPaid(), b.isPaid());
+            assertEquals(retrieved.get(0).getCode(), b2.getCode());
+            assertEquals(retrieved.get(0).getVisit().getCode(), b2.getVisit().getCode());
+            assertEquals(retrieved.get(0).getVisitor().getEmailAddress(), b2.getVisitor().getEmailAddress());
+            assertEquals(retrieved.get(0).isPaid(), b2.isPaid());
+            assertEquals(retrieved.get(1).getCode(), b.getCode());
+            assertEquals(retrieved.get(1).getVisit().getCode(), b.getVisit().getCode());
+            assertEquals(retrieved.get(1).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
+            assertEquals(retrieved.get(1).isPaid(), b.isPaid());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -112,6 +118,7 @@ public class BookingDAOTest {
         } finally {
             try {
                 dao.delete(b);
+                dao.delete(b2);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
