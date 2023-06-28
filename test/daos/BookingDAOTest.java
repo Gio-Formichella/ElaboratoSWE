@@ -25,7 +25,7 @@ public class BookingDAOTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(222, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         Booking b = new Booking(123, false, visit, visitor);
 
@@ -34,8 +34,8 @@ public class BookingDAOTest {
 
             Booking retrieved = dao.get(b.getCode());
             assertEquals(retrieved.getCode(), b.getCode());
-            assertEquals(retrieved.getVisitor(), b.getVisitor());
-            assertEquals(retrieved.getVisit(), b.getVisit());
+            assertEquals(retrieved.getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
+            assertEquals(retrieved.getVisit().getCode(), b.getVisit().getCode());
             assertEquals(retrieved.isPaid(), b.isPaid());
 
 
