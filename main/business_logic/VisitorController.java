@@ -38,10 +38,13 @@ public class VisitorController {
         vdao.cancelSubscriber(v);
     }
 
-    public void bookVisit(Visit v, main.DomainModel.Visitor vr, int code) throws SQLException, ParseException {
+    public void bookVisit(Visit v, Visitor vr, int code, int num_visitors) throws SQLException, ParseException {
+        int actual_visitors;
+        actual_visitors = v.getNum_visitors();
         BookingDAO bdao = new BookingDAO();
-        if(bdao.get(code) == null) {
+        if(bdao.get(code) == null && v.getMaxVisitors() >= (actual_visitors + num_visitors) ) {
             bdao.addVisit_Booking(v, vr, code);
+            v.setNum_visitors(actual_visitors + num_visitors);
         }
     }
 

@@ -10,6 +10,8 @@ public class Visit {
     private float price;
     private ArrayList<Itinerary> itineraries;
 
+    private int num_visitors;
+
     public Visit(int code, String date, String time, int maxVisitors, float price, ArrayList<Itinerary> itineraries){
         this.code = code;
         this.date = date;
@@ -17,6 +19,7 @@ public class Visit {
         this.maxVisitors = maxVisitors;
         this.price = price;
         this.itineraries = itineraries;
+        this.num_visitors = 0;
     }
 
     public int getCode(){
@@ -43,7 +46,11 @@ public class Visit {
         return itineraries;
     }
 
+    public int getNum_visitors(){
+        return num_visitors;
+    }
 
+    public void setNum_visitors(int num_visitors){this.num_visitors = num_visitors; }
 
 
 
