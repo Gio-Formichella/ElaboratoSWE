@@ -17,10 +17,12 @@ public class BookingDAOTest {
     public void insert(Booking b) throws SQLException {
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "INSERT INTO Booking (code, paid) VALUES (?, ?)";
+        String sql = "INSERT INTO Booking (code, paid, number_of_booking) VALUES (?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, b.getCode());
         ps.setBoolean(2, b.isPaid());
+        ps.setInt(1, b.getNumber_of_booking());
+
 
         ps.executeUpdate();
         ps.close();
