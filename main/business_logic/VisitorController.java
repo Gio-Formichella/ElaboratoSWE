@@ -11,14 +11,16 @@ import java.util.ArrayList;
 
 public class VisitorController {
 
-    public ArrayList<Booking> viewBookings(main.DomainModel.Visitor v) throws SQLException, ParseException {
+    public ArrayList<Booking> viewBookings(Visitor v) throws SQLException, ParseException {
         BookingDAO bdao = new BookingDAO();
         return bdao.getBooking(v);
     }
 
     public void cancelBooking(Booking b) throws SQLException, ParseException {
         BookingDAO dao = new BookingDAO();
-        if(dao.get(b.getCode()) != null) {
+        if(dao.get(b.getCode()).isEmpty()) {
+            System.out.println("La prenotazione richiesta non è presente");
+        } else {
             dao.delete(b.getCode());
         }
     }
@@ -38,13 +40,13 @@ public class VisitorController {
         vdao.cancelSubscriber(v);
     }
 
-    public void bookVisit(Visit v, Visitor vr, int code, int num_visitors) throws SQLException, ParseException {
-        int actual_visitors;
-        actual_visitors = v.getNum_visitors();
+    public void bookVisit(Visit v, Visitor vr, int code, int num_visitors) throws Exception {
         BookingDAO bdao = new BookingDAO();
-        if(bdao.get(code) == null && v.getMaxVisitors() >= (actual_visitors + num_visitors) ) {
-            bdao.addVisit_Booking(v, vr, code);
-            v.setNum_visitors(actual_visitors + num_visitors);
+        int booked_tickets = bdao.getBookedTickets(v);
+        if(bdao.get(code).isEmpty() && v.getMaxVisitors() >= (booked_tickets + num_visitors) ) {
+            bdao.addVisit_Booking(v, vr, code, num_visitors);
+        } else {
+            throw new Exception("Non ci sono posti liberi");
         }
     }
 

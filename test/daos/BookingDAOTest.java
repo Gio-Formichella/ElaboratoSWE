@@ -52,7 +52,7 @@ public class BookingDAOTest {
         itineraries.add(it);
         Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
-        Booking b = new Booking(129, false, visit, visitor);
+        Booking b = new Booking(129, false, visit, visitor, 5);
         ArrayList<Booking> retrieved = new ArrayList<>();
 
         try {
@@ -86,7 +86,7 @@ public class BookingDAOTest {
         itineraries.add(it);
         Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
-        Booking b = new Booking(128, false, visit, visitor);
+        Booking b = new Booking(128, false, visit, visitor, 5);
         try {
             insert(b);
             dao.delete(b.getCode());
@@ -121,8 +121,8 @@ public class BookingDAOTest {
         itineraries.add(it);
         Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
-        Booking b = new Booking(121, false, visit, visitor);
-        Booking b2 = new Booking(189, false, visit, visitor);
+        Booking b = new Booking(121, false, visit, visitor, 5);
+        Booking b2 = new Booking(189, false, visit, visitor, 5);
         try {
             insert(b);
             insert(b2);
@@ -160,7 +160,7 @@ public class BookingDAOTest {
         itineraries.add(it);
         Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
-        Booking b = new Booking(177, false, visit, visitor);
+        Booking b = new Booking(177, false, visit, visitor, 5);
 
         try{
             insert(b);
@@ -192,7 +192,7 @@ public class BookingDAOTest {
         ArrayList<Booking> retrieved = new ArrayList<>();
 
         try {
-            dao.addVisit_Booking(visit, visitor,b_code);
+            dao.addVisit_Booking(visit, visitor,b_code, 5);
 
             retrieved = dao.get(b_code);
             assertEquals(retrieved.get(0).getCode(), b_code);
