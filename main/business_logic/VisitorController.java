@@ -19,7 +19,7 @@ public class VisitorController {
     public void cancelBooking(Booking b) throws SQLException, ParseException {
         BookingDAO dao = new BookingDAO();
         if(dao.get(b.getCode()) != null) {
-            dao.delete(b);
+            dao.delete(b.getCode());
         }
     }
 
@@ -45,10 +45,10 @@ public class VisitorController {
         }
     }
 
-    public String printTicket(int code) throws SQLException, ParseException {
+    public ArrayList<Booking> getTicketInfo(int code) throws SQLException, ParseException {
         BookingDAO bdao = new BookingDAO();
         if(bdao.get(code) != null) {
-            return bdao.print(code);
+            return bdao.get(code);
         } else {
             return null;
         }
