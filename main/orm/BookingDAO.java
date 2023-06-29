@@ -44,12 +44,12 @@ public class BookingDAO {
         ArrayList<Booking> bookings = new ArrayList<>();
         VisitDAO vDAO = new VisitDAO();
         Visit visit = null;
-        ArrayList<Artwork> artworks = new ArrayList<>();
+        /*ArrayList<Artwork> artworks = new ArrayList<>();
         Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
-        itineraries.add(it);
+        itineraries.add(it);*/
         while (rs.next()){
             int booking = rs.getInt("booking");
             boolean paid = rs.getBoolean("paid");
@@ -59,8 +59,8 @@ public class BookingDAO {
             String surname = rs.getString("surname");
             boolean subscriber = rs.getBoolean("newsletter");
             Visitor visitor = new Visitor(name, surname, email, subscriber);
-            visit = new Visit(visit_code, "2020-01-01", "10:23:45", 120, 200,  itineraries);
-            //visit = vDAO.getTransitive(visit_code);
+            //visit = new Visit(visit_code, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+            visit = vDAO.getTransitive(visit_code);
             bookings.add(new Booking(booking, paid, visit, visitor));
         }
         return bookings;
@@ -77,12 +77,12 @@ public class BookingDAO {
         VisitDAO vDAO = new VisitDAO();
         Visit visit = null;
         Booking b = null;
-        ArrayList<Artwork> artworks = new ArrayList<>();
+        /*ArrayList<Artwork> artworks = new ArrayList<>();
         Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
-        itineraries.add(it);
+        itineraries.add(it);*/
         while (rs.next()) {
             boolean paid = rs.getBoolean("paid");
             int visit_code = rs.getInt("visit");
@@ -91,8 +91,8 @@ public class BookingDAO {
             String surname = rs.getString("surname");
             boolean subscriber = rs.getBoolean("newsletter");
             Visitor visitor = new Visitor(name, surname, email, subscriber);
-            //visit = vDAO.getTransitive(visit_code);
-            visit = new Visit(visit_code, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+            visit = vDAO.getTransitive(visit_code);
+            //visit = new Visit(visit_code, "2020-01-01", "10:23:45", 120, 200,  itineraries);
             b = new Booking(code, paid, visit, visitor);
             bookings.add(b);
 
