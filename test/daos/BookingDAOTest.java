@@ -11,8 +11,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BookingDAOTest {
 
@@ -67,7 +66,7 @@ public class BookingDAOTest {
         try {
             dao.insert(b);
             dao.delete(b);
-            assertNull(dao.get(b.getCode()));
+            assertTrue(dao.get(b.getCode()).isEmpty());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -123,6 +122,35 @@ public class BookingDAOTest {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Test
+    public void setPaid() throws SQLException {
+        BookingDAO bdao = new BookingDAO();
+        ArrayList<Artwork> artworks = new ArrayList<>();
+        Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
+        artworks.add(art);
+        ArrayList<Itinerary> itineraries = new ArrayList<>();
+        Itinerary it = new Itinerary(90, "Egitto", artworks);
+        itineraries.add(it);
+        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+        Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
+        Booking b = new Booking(177, false, visit, visitor);
+
+        try{
+            bdao.insert(b);
+            bdao.setPaid(b.getCode());
+            ArrayList<Booking> bookings = bdao.get(b.getCode());
+            Booking bTrue = bookings.get(0);
+            assertTrue(bTrue.isPaid());
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        } finally {
+            bdao.delete(b);
         }
     }
 

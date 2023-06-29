@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class BookingDAO {
 
-    static int new_code = 0;
     public void delete(Booking b) throws SQLException {
         Connection con = ConnectionManager.getConnection();
 
@@ -97,7 +96,7 @@ public class BookingDAO {
 
     public ArrayList<Booking> get(int code) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
-        String sql = "SELECT DISTINCT B.paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter FROM Booking_Visitor as BV, Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B WHERE BV.visitor = VR.email AND VB.visit = V.code AND BV.booking = VB.booking AND BV.booking = ?";
+        String sql = "SELECT DISTINCT B.paid as paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter FROM Booking_Visitor as BV, Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B WHERE BV.visitor = VR.email AND VB.visit = V.code AND B.code = BV.booking AND B.code = VB.booking AND B.code = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ResultSet rs = ps.executeQuery();
@@ -130,12 +129,11 @@ public class BookingDAO {
 
     }
 
-    public void addVisit_Booking(Visit v, Visitor vr) throws SQLException {
+    public void addVisit_Booking(Visit v, Visitor vr, int code) throws SQLException {
         Connection con = ConnectionManager.getConnection();
 
-        new_code = new_code + 1;
 
-        Booking b = new Booking(new_code, false, v, vr);
+        Booking b = new Booking(code, false, v, vr);
         String sql = "INSERT INTO Booking (code, paid) VALUES (?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, b.getCode());
@@ -190,5 +188,17 @@ public class BookingDAO {
             ticket = ticket + "Nome: "+ name + "Cognome: " + surname + "Email: " + email + "Codice prenotazione: " + visit_code + "Codice visita: " + visit.getCode() + "Data visita: " + visit.getDate() + "Orario visita: " + visit.getTime() + "Stato pagamento: " + paid + "\n";
         }
         return ticket;
+    }
+
+    public void setPaid(int code) throws SQLException {
+        Connection con = ConnectionManager.getConnection();
+
+        String sql = "UPDATE Booking SET paid = TRUE WHERE code = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, code);
+
+        ps.executeUpdate();
+        ps.close();
+
     }
 }

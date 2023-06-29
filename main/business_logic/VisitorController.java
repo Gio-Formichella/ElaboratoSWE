@@ -3,7 +3,6 @@ package main.business_logic;
 import main.DomainModel.*;
 import main.orm.ArtworkDAO;
 import main.orm.BookingDAO;
-import main.orm.ItineraryDAO;
 import main.orm.VisitorDAO;
 
 import java.sql.SQLException;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 
 public class VisitorController {
 
-    public ArrayList<Booking> viewBookings(Visitor v) throws SQLException, ParseException {
+    public ArrayList<Booking> viewBookings(main.DomainModel.Visitor v) throws SQLException, ParseException {
         BookingDAO bdao = new BookingDAO();
         return bdao.getBooking(v);
     }
@@ -29,19 +28,21 @@ public class VisitorController {
         return adao.getAll();
     }
 
-    public void SubscribeToNewsletter(Visitor v) throws SQLException {
+    public void SubscribeToNewsletter(main.DomainModel.Visitor v) throws SQLException {
         VisitorDAO vdao = new VisitorDAO();
         vdao.setSubscriber(v);
     }
 
-    public void UnsubscribeFromNewsletter(Visitor v) throws SQLException {
+    public void UnsubscribeFromNewsletter(main.DomainModel.Visitor v) throws SQLException {
         VisitorDAO vdao = new VisitorDAO();
         vdao.cancelSubscriber(v);
     }
 
-    public void bookVisit(Visit v, Visitor vr) throws SQLException{
+    public void bookVisit(Visit v, main.DomainModel.Visitor vr, int code) throws SQLException, ParseException {
         BookingDAO bdao = new BookingDAO();
-        bdao.addVisit_Booking(v, vr);
+        if(bdao.get(code) == null) {
+            bdao.addVisit_Booking(v, vr, code);
+        }
     }
 
     public String printTicket(int code) throws SQLException, ParseException {
@@ -50,6 +51,13 @@ public class VisitorController {
             return bdao.print(code);
         } else {
             return null;
+        }
+    }
+
+    public void payFee(int code) throws SQLException, ParseException {
+        BookingDAO bdao = new BookingDAO();
+        if(bdao.get(code) != null) {
+            bdao.setPaid(code);
         }
     }
 }
