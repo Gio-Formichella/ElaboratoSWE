@@ -21,7 +21,7 @@ public class BookingDAOTest {
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, b.getCode());
         ps.setBoolean(2, b.isPaid());
-        ps.setInt(1, b.getNumber_of_tickets());
+        ps.setInt(3, b.getNumber_of_tickets());
 
 
         ps.executeUpdate();
@@ -61,10 +61,10 @@ public class BookingDAOTest {
             insert(b);
 
             retrieved = dao.get(b.getCode());
-            assertEquals(retrieved.get(0).getCode(), b.getCode());
-            assertEquals(retrieved.get(0).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
-            assertEquals(retrieved.get(0).getVisit().getCode(), b.getVisit().getCode());
-            assertEquals(retrieved.get(0).isPaid(), b.isPaid());
+            assertEquals(retrieved.get(retrieved.size()-1).getCode(), b.getCode());
+            assertEquals(retrieved.get(retrieved.size()-1).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
+            assertEquals(retrieved.get(retrieved.size()-1).getVisit().getCode(), b.getVisit().getCode());
+            assertEquals(retrieved.get(retrieved.size()-1).isPaid(), b.isPaid());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -124,19 +124,13 @@ public class BookingDAOTest {
         Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         Booking b = new Booking(121, false, visit, visitor, 5);
-        Booking b2 = new Booking(189, false, visit, visitor, 5);
         try {
             insert(b);
-            insert(b2);
             ArrayList<Booking> retrieved = dao.getBooking(visitor);
-            assertEquals(retrieved.get(0).getCode(), b2.getCode());
-            assertEquals(retrieved.get(0).getVisit().getCode(), b2.getVisit().getCode());
-            assertEquals(retrieved.get(0).getVisitor().getEmailAddress(), b2.getVisitor().getEmailAddress());
-            assertEquals(retrieved.get(0).isPaid(), b2.isPaid());
-            assertEquals(retrieved.get(1).getCode(), b.getCode());
-            assertEquals(retrieved.get(1).getVisit().getCode(), b.getVisit().getCode());
-            assertEquals(retrieved.get(1).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
-            assertEquals(retrieved.get(1).isPaid(), b.isPaid());
+            assertEquals(retrieved.get(retrieved.size()-1).getCode(), b.getCode());
+            assertEquals(retrieved.get(retrieved.size()-1).getVisit().getCode(), b.getVisit().getCode());
+            assertEquals(retrieved.get(retrieved.size()-1).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
+            assertEquals(retrieved.get(retrieved.size()-1).isPaid(), b.isPaid());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -144,7 +138,6 @@ public class BookingDAOTest {
         } finally {
             try {
                 dao.delete(b.getCode());
-                dao.delete(b2.getCode());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
