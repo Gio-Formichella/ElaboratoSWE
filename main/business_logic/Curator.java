@@ -149,8 +149,6 @@ public class Curator {
 
     public void cancelItinerary(Itinerary i) throws SQLException{
         ItineraryDAO dao = new ItineraryDAO();
-        dao.delete(i);
-        VisitDAO vdao = new VisitDAO();
-        vdao.removeItineraryFromVisits(i.getId());//TODO should it also remove the itinerary from visits and notify nl subscribers like this?
+        dao.delete(i);//cancella l'itinerario dal db. Nota:dev'essere sicuro
     }
 }

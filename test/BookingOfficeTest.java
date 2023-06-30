@@ -127,6 +127,8 @@ public class BookingOfficeTest {
             e.printStackTrace();
         }catch(ParseException e){
             e.printStackTrace();
+        }catch(MessagingException e){
+            e.printStackTrace();
         }finally{
             try {
                 VisitDAO dao = new VisitDAO();

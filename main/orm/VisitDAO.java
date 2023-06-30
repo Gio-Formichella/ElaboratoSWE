@@ -17,7 +17,7 @@ public class VisitDAO {
         
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "SELECT code, date_, time_, max_visitors, price, itinerary FROM Visit WHERE code = ?";
+        String sql = "SELECT code, date_, time_, max_visitors, price, itinerary FROM Visit join itinerary_visit on visit=visit.code WHERE code = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ResultSet rs = ps.executeQuery();
@@ -45,26 +45,31 @@ public class VisitDAO {
 
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "INSERT INTO Visit (code, date_, time_, max_visitors, price, itinerary) VALUES ( ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Visit (code, date_, time_, max_visitors, price) VALUES ( ?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
         ArrayList<Itinerary> itineraries = v.getItineraries();
         java.util.Date utilDate = format.parse(v.getDate());
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-        LocalTime localTime = LocalTime.parse(v.getTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
+        LocalTime localTime = LocalTime.parse(v.getTime(), DateTimeFormatter.ofPattern("HH:mm"));
         ps.setInt(1, v.getCode());
         ps.setDate(2, sqlDate);
         ps.setTime(3, java.sql.Time.valueOf(localTime));
         ps.setInt(4, v.getMaxVisitors());
         ps.setFloat(5, v.getPrice());
+
         if(itineraries.isEmpty()) {
             throw new SQLException("can't create a visit with no itineraries");
         }else{
+            ps.executeUpdate();
+            ps.close();
+            ps=con.prepareStatement("INSERT INTO itinerary_visit (itinerary, visit) VALUES (?, ?)");
             for (Itinerary i : itineraries) {//instantiates tuples for every itinerary
-                ps.setInt(6, i.getId());
+                ps.setInt(1, i.getId());
+                ps.setInt(2, v.getCode());
                 ps.executeUpdate();
             }
+            ps.close();
         }
-        ps.close();
     }
 
     public void delete(int code) throws SQLException {
@@ -72,6 +77,11 @@ public class VisitDAO {
 
         String sql = "DELETE FROM Visit WHERE code = ?";
         PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, code);
+        ps.executeUpdate();
+        ps.close();
+        sql = "DELETE FROM bisit_booking WHERE visit = ?";
+        ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ps.executeUpdate();
         ps.close();
