@@ -113,7 +113,7 @@ public class BookingDAOTest {
     }
 
     @Test
-    public void getBooking() {
+    public void getBookingVisitor() {
         BookingDAO dao = new BookingDAO();
         ArrayList<Artwork> artworks = new ArrayList<>();
         Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
@@ -126,7 +126,7 @@ public class BookingDAOTest {
         Booking b = new Booking(121, false, visit, visitor, 5);
         try {
             insert(b);
-            ArrayList<Booking> retrieved = dao.getBooking(visitor);
+            ArrayList<Booking> retrieved = dao.getBookingVisitor(visitor);
             assertEquals(retrieved.get(retrieved.size()-1).getCode(), b.getCode());
             assertEquals(retrieved.get(retrieved.size()-1).getVisit().getCode(), b.getVisit().getCode());
             assertEquals(retrieved.get(retrieved.size()-1).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
@@ -204,6 +204,42 @@ public class BookingDAOTest {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Test
+    public void getBookingVisit(){
+        BookingDAO bdao = new BookingDAO();
+        ArrayList<Artwork> artworks = new ArrayList<>();
+        Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
+        artworks.add(art);
+        ArrayList<Itinerary> itineraries = new ArrayList<>();
+        Itinerary it = new Itinerary(90, "Egitto", artworks);
+        itineraries.add(it);
+        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+        Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
+        int b_code = 165;
+        ArrayList<Object> info_booking;
+        Booking b = null;
+        Visit v = null;
+        Visitor vr = null;
+        try{
+            bdao.addVisit_Booking(visit, visitor, b_code, 5);
+            info_booking = bdao.getBookingVisit(b_code, visit);
+            b = (Booking) info_booking.get(0);
+            v = (Visit) info_booking.get(1);
+            vr = (Visitor) info_booking.get(2);
+            assertEquals(b_code, b.getCode());
+            assertEquals(visit.getCode(), v.getCode());
+            assertEquals(visitor.getEmailAddress(), vr.getEmailAddress());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        } try {
+            bdao.delete(b_code);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -14,7 +14,7 @@ public class VisitorController {
 
     public ArrayList<Booking> viewBookings(Visitor v) throws SQLException, ParseException {
         BookingDAO bdao = new BookingDAO();
-        return bdao.getBooking(v);
+        return bdao.getBookingVisitor(v);
     }
 
     public void cancelBooking(int code) throws SQLException, ParseException {
@@ -52,12 +52,12 @@ public class VisitorController {
         }
     }
 
-    public ArrayList<Booking> getBookedTicketInfo(int code) throws SQLException, ParseException {
+    public ArrayList<Object> getBookedTicketInfo(int code, Visit v) throws SQLException, ParseException {
         BookingDAO bdao = new BookingDAO();
-        if(bdao.get(code) != null) {
-            return bdao.get(code);
+        if(bdao.getBookingVisit(code, v) != null) {
+            return bdao.getBookingVisit(code, v);
         } else {
-            return null;
+            throw new SQLException("Non ci sono prenotazioni alla visita con quel codice");
         }
     }
 

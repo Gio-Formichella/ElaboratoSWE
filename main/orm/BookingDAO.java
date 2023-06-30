@@ -34,7 +34,7 @@ public class BookingDAO {
         ps1.close();
     }
 
-    public ArrayList<Booking> getBooking(Visitor v) throws SQLException, ParseException {
+    public ArrayList<Booking> getBookingVisitor(Visitor v) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
         String sql = "SELECT DISTINCT BV.booking as booking, B.paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Booking_Visitor as BV, Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B  WHERE BV.visitor = VR.email AND VB.visit = V.code AND BV.booking = B.code AND VB.booking = B.code AND BV.visitor = ?";
         PreparedStatement ps = con.prepareStatement(sql);
@@ -44,12 +44,12 @@ public class BookingDAO {
         ArrayList<Booking> bookings = new ArrayList<>();
         VisitDAO vDAO = new VisitDAO();
         Visit visit = null;
-        ArrayList<Artwork> artworks = new ArrayList<>();
+        /*ArrayList<Artwork> artworks = new ArrayList<>();
         Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
-        itineraries.add(it);
+        itineraries.add(it);*/
         while (rs.next()){
             int booking = rs.getInt("booking");
             boolean paid = rs.getBoolean("paid");
@@ -60,8 +60,8 @@ public class BookingDAO {
             boolean subscriber = rs.getBoolean("newsletter");
             int num_of_tickets = rs.getInt("number_of_tickets");
             Visitor visitor = new Visitor(name, surname, email, subscriber);
-            visit = new Visit(visit_code, "2020-01-01", "10:23:45", 120, 200,  itineraries);
-            //visit = vDAO.getTransitive(visit_code);
+            //visit = new Visit(visit_code, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+            visit = vDAO.getTransitive(visit_code);
             bookings.add(new Booking(booking, paid, visit, visitor, num_of_tickets));
         }
         return bookings;
@@ -78,12 +78,12 @@ public class BookingDAO {
         VisitDAO vDAO = new VisitDAO();
         Visit visit = null;
         Booking b = null;
-        ArrayList<Artwork> artworks = new ArrayList<>();
+        /*ArrayList<Artwork> artworks = new ArrayList<>();
         Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
-        itineraries.add(it);
+        itineraries.add(it);*/
         while (rs.next()) {
             boolean paid = rs.getBoolean("paid");
             int visit_code = rs.getInt("visit");
@@ -93,14 +93,39 @@ public class BookingDAO {
             boolean subscriber = rs.getBoolean("newsletter");
             int num_of_tickets = rs.getInt("number_of_tickets");
             Visitor visitor = new Visitor(name, surname, email, subscriber);
-            //visit = vDAO.getTransitive(visit_code);
-            visit = new Visit(visit_code, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+            visit = vDAO.getTransitive(visit_code);
+            //visit = new Visit(visit_code, "2020-01-01", "10:23:45", 120, 200,  itineraries);
             b = new Booking(code, paid, visit, visitor, num_of_tickets);
             bookings.add(b);
 
         }
         return bookings;
 
+    }
+
+    public ArrayList<Object> getBookingVisit(int code, Visit v) throws SQLException, ParseException {
+        Connection con = ConnectionManager.getConnection();
+        String sql = "SELECT DISTINCT B.paid as paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Booking_Visitor as BV, Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B WHERE BV.visitor = VR.email AND VB.visit = V.code AND B.code = BV.booking AND B.code = VB.booking AND B.code = ? AND V.code = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, code);
+        ps.setInt(2, v.getCode());
+        ResultSet rs = ps.executeQuery();
+        ArrayList<Object> info_booking = new ArrayList<>();
+        Booking b = null;
+        while (rs.next()) {
+            boolean paid = rs.getBoolean("paid");
+            String email = rs.getString("email");
+            String name = rs.getString("name");
+            String surname = rs.getString("surname");
+            boolean subscriber = rs.getBoolean("newsletter");
+            int num_of_tickets = rs.getInt("number_of_tickets");
+            Visitor visitor = new Visitor(name, surname, email, subscriber);
+            b = new Booking(code, paid, v, visitor, num_of_tickets);
+            info_booking.add(b);
+            info_booking.add(v);
+            info_booking.add(visitor);
+        }
+        return info_booking;
     }
 
     public void addVisit_Booking(Visit v, Visitor vr, int code, int number_of_tickets) throws SQLException {
