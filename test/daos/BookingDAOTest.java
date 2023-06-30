@@ -17,23 +17,16 @@ public class BookingDAOTest {
     public void insert(Booking b) throws SQLException {
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "INSERT INTO Booking (code, paid, number_of_tickets) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Booking (code, paid, number_of_tickets, visitor) VALUES (?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, b.getCode());
         ps.setBoolean(2, b.isPaid());
         ps.setInt(3, b.getNumber_of_tickets());
+        ps.setString(4, b.getVisitor().getEmailAddress());
 
 
         ps.executeUpdate();
         ps.close();
-
-        String sql1 = "INSERT INTO Booking_Visitor (booking, visitor) VALUES (?, ?)";
-        PreparedStatement ps1 = con.prepareStatement(sql1);
-        ps1.setInt(1, b.getCode());
-        ps1.setString(2, b.getVisitor().getEmailAddress());
-
-        ps1.executeUpdate();
-        ps1.close();
 
         String sql2 = "INSERT INTO Visit_Booking (visit, booking) VALUES (?, ?)";
         PreparedStatement ps2 = con.prepareStatement(sql2);
@@ -127,10 +120,10 @@ public class BookingDAOTest {
         try {
             insert(b);
             ArrayList<Booking> retrieved = dao.getBookingVisitor(visitor);
-            assertEquals(retrieved.get(retrieved.size()-1).getCode(), b.getCode());
-            assertEquals(retrieved.get(retrieved.size()-1).getVisit().getCode(), b.getVisit().getCode());
-            assertEquals(retrieved.get(retrieved.size()-1).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
-            assertEquals(retrieved.get(retrieved.size()-1).isPaid(), b.isPaid());
+            assertEquals(retrieved.get(retrieved.size()-2).getCode(), b.getCode());
+            assertEquals(retrieved.get(retrieved.size()-2).getVisit().getCode(), b.getVisit().getCode());
+            assertEquals(retrieved.get(retrieved.size()-2).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
+            assertEquals(retrieved.get(retrieved.size()-2).isPaid(), b.isPaid());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException e) {

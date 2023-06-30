@@ -15,12 +15,6 @@ public class BookingDAO {
     public void delete(int code) throws SQLException {
         Connection con = ConnectionManager.getConnection();
 
-        String sql3 = "DELETE FROM Booking_Visitor WHERE booking = ?";
-        PreparedStatement ps3 = con.prepareStatement(sql3);
-        ps3.setInt(1, code);
-        ps3.executeUpdate();
-        ps3.close();
-
         String sql2 = "DELETE FROM Visit_Booking WHERE booking = ?";
         PreparedStatement ps2 = con.prepareStatement(sql2);
         ps2.setInt(1, code);
@@ -36,7 +30,7 @@ public class BookingDAO {
 
     public ArrayList<Booking> getBookingVisitor(Visitor v) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
-        String sql = "SELECT DISTINCT BV.booking as booking, B.paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Booking_Visitor as BV, Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B  WHERE BV.visitor = VR.email AND VB.visit = V.code AND BV.booking = B.code AND VB.booking = B.code AND BV.visitor = ?";
+        String sql = "SELECT DISTINCT B.code as booking, B.paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B  WHERE VB.visit = V.code AND VR.email = B.visitor AND VB.booking = B.code AND B.visitor = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, v.getEmailAddress());
         ResultSet rs = ps.executeQuery();
@@ -69,7 +63,7 @@ public class BookingDAO {
 
     public ArrayList<Booking> get(int code) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
-        String sql = "SELECT DISTINCT B.paid as paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Booking_Visitor as BV, Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B WHERE BV.visitor = VR.email AND VB.visit = V.code AND B.code = BV.booking AND B.code = VB.booking AND B.code = ?";
+        String sql = "SELECT DISTINCT B.paid as paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B WHERE VB.visit = V.code AND B.visitor = VR.email AND B.code = VB.booking AND B.code = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ResultSet rs = ps.executeQuery();
@@ -105,7 +99,7 @@ public class BookingDAO {
 
     public ArrayList<Object> getBookingVisit(int code, Visit v) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
-        String sql = "SELECT DISTINCT B.paid as paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Booking_Visitor as BV, Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B WHERE BV.visitor = VR.email AND VB.visit = V.code AND B.code = BV.booking AND B.code = VB.booking AND B.code = ? AND V.code = ?";
+        String sql = "SELECT DISTINCT B.paid as paid, V.code as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visit_Booking as VB, Visit as V, Visitor as VR, Booking as B WHERE VB.visit = V.code AND B.visitor = VR.email AND B.code = VB.booking AND B.code = ? AND V.code = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ps.setInt(2, v.getCode());
@@ -133,22 +127,15 @@ public class BookingDAO {
 
 
         Booking b = new Booking(code, false, v, vr, number_of_tickets);
-        String sql = "INSERT INTO Booking (code, paid, number_of_tickets) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Booking (code, paid, number_of_tickets, visitor) VALUES (?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, b.getCode());
         ps.setBoolean(2, b.isPaid());
         ps.setInt(3, b.getNumber_of_tickets());
+        ps.setString(4, b.getVisitor().getEmailAddress());
 
         ps.executeUpdate();
         ps.close();
-
-        String sql1 = "INSERT INTO Booking_Visitor (booking, visitor) VALUES (?, ?)";
-        PreparedStatement ps1 = con.prepareStatement(sql1);
-        ps1.setInt(1, b.getCode());
-        ps1.setString(2, vr.getEmailAddress());
-
-        ps1.executeUpdate();
-        ps1.close();
 
         String sql2 = "INSERT INTO Visit_Booking (visit, booking) VALUES (?, ?)";
         PreparedStatement ps2 = con.prepareStatement(sql2);

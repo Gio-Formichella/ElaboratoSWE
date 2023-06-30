@@ -140,10 +140,10 @@ public class VisitorTest {
             vc.bookVisit(visit, visitor, b.getCode(), 5);
             ArrayList<Booking> retrieved = vc.viewBookings(visitor);
 
-            assertEquals(retrieved.get(retrieved.size()-1).getCode(), b.getCode());
-            assertEquals(retrieved.get(retrieved.size()-1).getVisit().getCode(), b.getVisit().getCode());
-            assertEquals(retrieved.get(retrieved.size()-1).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
-            assertEquals(retrieved.get(retrieved.size()-1).isPaid(), b.isPaid());
+            assertEquals(retrieved.get(retrieved.size()-2).getCode(), b.getCode());
+            assertEquals(retrieved.get(retrieved.size()-2).getVisit().getCode(), b.getVisit().getCode());
+            assertEquals(retrieved.get(retrieved.size()-2).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
+            assertEquals(retrieved.get(retrieved.size()-2).isPaid(), b.isPaid());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
