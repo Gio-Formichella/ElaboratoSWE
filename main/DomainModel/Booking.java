@@ -7,11 +7,13 @@ public class Booking {
     private Visit visit;
     private Visitor visitor;
 
-    public Booking(int code, boolean paid, Visit visit, Visitor visitor) {
+    private int number_of_tickets;
+    public Booking(int code, boolean paid, Visit visit, Visitor visitor, int number_of_tickets) {
         this.code = code;
         this.paid = paid;
         this.visit = visit;
         this.visitor = visitor;
+        this.number_of_tickets = number_of_tickets;
     }
 
     public int getCode() {
@@ -33,4 +35,8 @@ public class Booking {
     public void setPaid(){
         this.paid = true;
     }
+
+    public void setNumber_of_tickets(int number_of_tickets){this.number_of_tickets = number_of_tickets;}
+
+    public int getNumber_of_tickets(){return number_of_tickets;}
 }
