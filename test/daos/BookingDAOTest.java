@@ -17,11 +17,11 @@ public class BookingDAOTest {
     public void insert(Booking b) throws SQLException {
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "INSERT INTO Booking (code, paid, number_of_booking) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Booking (code, paid, number_of_tickets) VALUES (?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, b.getCode());
         ps.setBoolean(2, b.isPaid());
-        ps.setInt(1, b.getNumber_of_booking());
+        ps.setInt(1, b.getNumber_of_tickets());
 
 
         ps.executeUpdate();
@@ -191,7 +191,7 @@ public class BookingDAOTest {
         Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         int b_code = 190;
-        ArrayList<Booking> retrieved = new ArrayList<>();
+        ArrayList<Booking> retrieved;
 
         try {
             dao.addVisit_Booking(visit, visitor,b_code, 5);

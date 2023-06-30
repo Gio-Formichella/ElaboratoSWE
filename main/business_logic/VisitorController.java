@@ -3,6 +3,7 @@ package main.business_logic;
 import main.DomainModel.*;
 import main.orm.ArtworkDAO;
 import main.orm.BookingDAO;
+import main.orm.VisitDAO;
 import main.orm.VisitorDAO;
 
 import java.sql.SQLException;
@@ -16,12 +17,12 @@ public class VisitorController {
         return bdao.getBooking(v);
     }
 
-    public void cancelBooking(Booking b) throws SQLException, ParseException {
+    public void cancelBooking(int code) throws SQLException, ParseException {
         BookingDAO dao = new BookingDAO();
-        if(dao.get(b.getCode()).isEmpty()) {
+        if(dao.get(code).isEmpty()) {
             System.out.println("La prenotazione richiesta non è presente");
         } else {
-            dao.delete(b.getCode());
+            dao.delete(code);
         }
     }
 
@@ -30,19 +31,20 @@ public class VisitorController {
         return adao.getAll();
     }
 
-    public void SubscribeToNewsletter(main.DomainModel.Visitor v) throws SQLException {
+    public void SubscribeToNewsletter(Visitor v) throws SQLException {
         VisitorDAO vdao = new VisitorDAO();
         vdao.setSubscriber(v);
     }
 
-    public void UnsubscribeFromNewsletter(main.DomainModel.Visitor v) throws SQLException {
+    public void UnsubscribeFromNewsletter(Visitor v) throws SQLException {
         VisitorDAO vdao = new VisitorDAO();
         vdao.cancelSubscriber(v);
     }
 
     public void bookVisit(Visit v, Visitor vr, int code, int num_visitors) throws Exception {
+        VisitDAO vdao = new VisitDAO();
         BookingDAO bdao = new BookingDAO();
-        int booked_tickets = bdao.getBookedTickets(v);
+        int booked_tickets = vdao.getBookedTickets(v);
         if(bdao.get(code).isEmpty() && v.getMaxVisitors() >= (booked_tickets + num_visitors) ) {
             bdao.addVisit_Booking(v, vr, code, num_visitors);
         } else {
@@ -50,7 +52,7 @@ public class VisitorController {
         }
     }
 
-    public ArrayList<Booking> getTicketInfo(int code) throws SQLException, ParseException {
+    public ArrayList<Booking> getBookedTicketInfo(int code) throws SQLException, ParseException {
         BookingDAO bdao = new BookingDAO();
         if(bdao.get(code) != null) {
             return bdao.get(code);
