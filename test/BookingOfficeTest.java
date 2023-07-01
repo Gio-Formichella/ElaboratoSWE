@@ -43,7 +43,7 @@ public class BookingOfficeTest {
             assertEquals(v.getTime(), time);
             assertEquals(v.getMaxVisitors(), maxVisitors);
             assertEquals(v.getPrice(), price);
-            assertTrue(v.getItineraries().isEmpty());
+            assertFalse(v.getItineraries().isEmpty());
         } catch (SQLException e) {
             e.printStackTrace();
         }catch(ParseException e){
@@ -139,9 +139,5 @@ public class BookingOfficeTest {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Test
-    public void viewVisits(){//TODO decidere se ha senso testare o no (è banale) 
     }
 }

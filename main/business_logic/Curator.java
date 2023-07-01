@@ -3,7 +3,6 @@ package main.business_logic;
 import main.DomainModel.*;
 import main.orm.ArtworkDAO;
 import main.orm.ItineraryDAO;
-import main.orm.VisitDAO;
 import main.orm.VisitorDAO;
 
 import javax.mail.*;

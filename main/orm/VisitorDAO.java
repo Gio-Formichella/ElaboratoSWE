@@ -32,7 +32,7 @@ public class VisitorDAO {
 
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "SELECT email, Visitor.name as name, surname, newsletter FROM artwork_itinerary as at, visit_booking as vb, booking_visitor as bv, visitor WHERE artwork = ? AND at.itinerary = visit_itinerary AND vb.booking = bv.booking and bv.visitor=email";
+        String sql = "SELECT email, Visitor.name as name, surname, newsletter FROM artwork_itinerary as at, visit_booking as vb, visitor_booking as bv, visitor WHERE artwork = ? AND at.itinerary = visit_itinerary AND vb.booking = bv.booking and bv.visitor=email";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, a.getCode());
         ResultSet rs = ps.executeQuery();
@@ -53,7 +53,7 @@ public class VisitorDAO {
 
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "SELECT email, Visitor.name as name, surname, newsletter FROM visit_booking as vb, booking_visitor as bv, visitor WHERE visit = ? AND vb.booking = bv.booking and bv.visitor=email";
+        String sql = "SELECT email, Visitor.name as name, surname, newsletter from visitor join booking on visitor=visitor.email join visit_booking on booking=booking.code where visit = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, v.getCode());
         ResultSet rs = ps.executeQuery();
