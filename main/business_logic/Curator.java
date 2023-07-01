@@ -112,7 +112,6 @@ public class Curator {
                 //opera torna allo stato visibile
                 VisitorDAO dao = new VisitorDAO();
                 ArrayList<Visitor> nlsubscribers = dao.getNLSubscribers();
-                //TODO metodo di invio email
                 //invio email
                 if (nlsubscribers.size()>0) {
                     Properties properties = new Properties();
