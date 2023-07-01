@@ -3,7 +3,6 @@ package main.business_logic;
 import main.DomainModel.*;
 import main.orm.ArtworkDAO;
 import main.orm.ItineraryDAO;
-import main.orm.VisitDAO;
 import main.orm.VisitorDAO;
 
 import javax.mail.*;
@@ -149,6 +148,7 @@ public class Curator {
 
     public void cancelItinerary(Itinerary i) throws SQLException{
         ItineraryDAO dao = new ItineraryDAO();
-        dao.delete(i);//cancella l'itinerario dal db. Nota:dev'essere sicuro
+        dao.delete(i);
     }
+
 }
