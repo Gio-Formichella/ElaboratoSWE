@@ -1,10 +1,7 @@
 package main.orm;
 
-import main.DomainModel.Artwork;
-import main.DomainModel.ArtworkStatus;
-import main.DomainModel.OnDisplay;
-import main.DomainModel.OnLoan;
-import main.DomainModel.UnderMaintenance;
+import main.DomainModel.*;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
