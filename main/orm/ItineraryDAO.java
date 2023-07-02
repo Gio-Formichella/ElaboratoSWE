@@ -16,7 +16,6 @@ public class ItineraryDAO {
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, i.getId());
         ps.setString(2, i.getName());
-
         ps.executeUpdate();
         ps.close();
     }

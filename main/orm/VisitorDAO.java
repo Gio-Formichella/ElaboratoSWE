@@ -32,12 +32,30 @@ public class VisitorDAO {
 
         Connection con = ConnectionManager.getConnection();
 
-        String sql = """
-                SELECT email, name, surname, newsletter
-                FROM artwork_itinerary at, visit_itinerary vt, visit_booking vb, booking_visitor bv, visitor v
-                WHERE artwork = ? AND at.itinerary = vt.itinerary AND vt.visit = vb.visit AND vb.booking = bv.booking AND bv.visitor = v.email\s""";
+        String sql = "SELECT email, Visitor.name as name, surname, newsletter FROM artwork_itinerary as at, visit_booking as vb, visitor_booking as bv, visitor WHERE artwork = ? AND at.itinerary = visit_itinerary AND vb.booking = bv.booking and bv.visitor=email";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, a.getCode());
+        ResultSet rs = ps.executeQuery();
+
+        ArrayList<Visitor> visitors = new ArrayList<>();
+        while (rs.next()) {
+            String email = rs.getString("email");
+            String name = rs.getString("name");
+            String surname = rs.getString("surname");
+            boolean subscriber = rs.getBoolean("newsletter");
+            visitors.add(new Visitor(email, name, surname, subscriber));
+        }
+        return visitors;
+    }
+
+    public ArrayList<Visitor> getToBeNotifiedVisitors(Visit v) throws SQLException {
+        //returns visitors who booked the modified/cancelled visit
+
+        Connection con = ConnectionManager.getConnection();
+
+        String sql = "SELECT email, Visitor.name as name, surname, newsletter from visitor join booking on visitor=visitor.email join visit_booking on booking=booking.code where visit = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, v.getCode());
         ResultSet rs = ps.executeQuery();
 
         ArrayList<Visitor> visitors = new ArrayList<>();
