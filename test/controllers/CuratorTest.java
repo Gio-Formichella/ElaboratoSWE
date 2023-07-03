@@ -1,4 +1,4 @@
-package test;
+package test.controllers;
 
 import main.DomainModel.*;
 import main.business_logic.Curator;
