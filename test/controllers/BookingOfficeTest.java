@@ -1,19 +1,16 @@
-package test;
+package test.controllers;
 
-import org.junit.Test;
+import main.DomainModel.Itinerary;
+import main.DomainModel.Visit;
 import main.business_logic.BookingOffice;
 import main.orm.ItineraryDAO;
 import main.orm.VisitDAO;
-import main.DomainModel.Visit;
-import main.DomainModel.Itinerary;
-
-import java.text.SimpleDateFormat;
-
-import java.sql.*;
-import java.text.ParseException;
-import java.util.ArrayList;
+import org.junit.Test;
 
 import javax.mail.MessagingException;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,11 +41,9 @@ public class BookingOfficeTest {
             assertEquals(v.getMaxVisitors(), maxVisitors);
             assertEquals(v.getPrice(), price);
             assertFalse(v.getItineraries().isEmpty());
-        } catch (SQLException e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
-        }catch(ParseException e){
-            e.printStackTrace();
-        }finally{
+        } finally{
             try {
                 VisitDAO vDao = new VisitDAO();
                 vDao.delete(code);
@@ -78,13 +73,9 @@ public class BookingOfficeTest {
             b.cancelVisit(code);
             VisitDAO dao = new VisitDAO();
             assertNull(dao.getTransitive(code));
-        } catch (SQLException e) {
+        } catch (SQLException | ParseException | MessagingException e) {
             e.printStackTrace();
-        }catch(ParseException e){
-            e.printStackTrace();
-        }catch(MessagingException e){
-            e.printStackTrace();
-        }finally{
+        } finally{
             try {
                 VisitDAO dao = new VisitDAO();
                 dao.delete(code);
@@ -123,13 +114,9 @@ public class BookingOfficeTest {
             assertEquals(v2.getTime(), time2);
             assertEquals(v2.getMaxVisitors(), maxVisitors2);
             assertEquals(v2.getPrice(), price2);
-        } catch (SQLException e) {
+        } catch (SQLException | ParseException | MessagingException e) {
             e.printStackTrace();
-        }catch(ParseException e){
-            e.printStackTrace();
-        }catch(MessagingException e){
-            e.printStackTrace();
-        }finally{
+        } finally{
             try {
                 VisitDAO dao = new VisitDAO();
                 dao.delete(code);
