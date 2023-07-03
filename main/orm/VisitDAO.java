@@ -31,7 +31,6 @@ public class VisitDAO {
         }else{
             return null;
         }
-        
         return v;
     }
 
@@ -76,7 +75,7 @@ public class VisitDAO {
         ps.executeUpdate();
         ps.close();
 
-        sql = "DELETE FROM visit_booking WHERE visit = ?";
+        sql = "DELETE FROM booking WHERE visit = ?";
         ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ps.executeUpdate();
@@ -111,7 +110,7 @@ public class VisitDAO {
     public ArrayList<Visit> getAll() throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "SELECT code FROM Visit GROUP BY code";
+        String sql = "SELECT code FROM Visit";
         PreparedStatement ps = con.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
@@ -120,14 +119,21 @@ public class VisitDAO {
             Visit v = getTransitive(rs.getInt("code"));
             visits.add(v);
         }
+        ps.close();
         return visits;
     }
 
     public void removeItineraryFromVisits(int id)throws SQLException{
         Connection con = ConnectionManager.getConnection();
-
-        String sql = "DELETE FROM Visit WHERE itinerary = ?";
-        PreparedStatement ps = con.prepareStatement(sql);
+        PreparedStatement ps= con.prepareStatement("SELECT booking.visit visit FROM visit_itinerary join booking on visit_itinerary.visit=booking.visit WHERE itinerary = ?");
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()){//if the itinerary is booked, it can't be deleted -> curator gets an error message
+            throw new SQLException("can't delete itinerary because the visit is already booked");
+        }
+        ps.close();
+        String sql = "DELETE FROM visit_itinerary WHERE itinerary = ?";//if no exception is thrown -> delete the itinerary
+        ps = con.prepareStatement(sql);
         ps.setInt(1, id);
         ps.executeUpdate();
         ps.close();
