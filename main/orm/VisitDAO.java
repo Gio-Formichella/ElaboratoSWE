@@ -24,8 +24,8 @@ public class VisitDAO {
         if(rs.next()){
             v = new Visit(rs.getInt("code"), rs.getDate("date_").toString(), rs.getString("time_"), rs.getInt("max_visitors"), rs.getFloat("price"), itineraries);
             do {//uses ItineraryDAO to instantiate Itinerary objects
-            Itinerary i = iDAO.getTransitive(rs.getInt("itinerary"));
-            v.addItinerary(i);
+                Itinerary i = iDAO.getTransitive(rs.getInt("itinerary"));
+                v.addItinerary(i);
             }while (rs.next());
 
         }else{

@@ -46,4 +46,8 @@ public class Visit {
         }
         return itinerariesCopy;
     }
+
+    public void addItinerary(Itinerary i){
+        itineraries.add(i);
+    }
 }
