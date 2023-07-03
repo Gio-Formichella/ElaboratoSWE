@@ -17,20 +17,20 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class VisitorTest {
     @Test
-    public void cancelBooking(){
+    public void cancelBooking() {
         VisitorController v = new VisitorController();
 
         ArrayList<Artwork> artworks = new ArrayList<>();
-        Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
+        Artwork art = new Artwork(5, "La passeggiata", "Monet", new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         Booking b = new Booking(194, false, visit, visitor, 5);
         BookingDAO bdao = new BookingDAO();
-        try{
+        try {
             v.bookVisit(visit, visitor, b.getCode(), 4);
             v.cancelBooking(b.getCode());
             assertTrue(bdao.get(b.getCode()).isEmpty());
@@ -47,7 +47,7 @@ public class VisitorTest {
         VisitorController vc = new VisitorController();
         VisitorDAO vdao = new VisitorDAO();
         Visitor vTrue;
-        try{
+        try {
             vc.SubscribeToNewsletter(v);
             vTrue = vdao.get(v.getEmailAddress());
             assertTrue(vTrue.isNLSubscriber());
@@ -57,13 +57,14 @@ public class VisitorTest {
             vc.UnsubscribeFromNewsletter(v);
         }
     }
+
     @Test
     public void unsubscribeFromNewsletter() throws SQLException {
         Visitor v = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         VisitorController vc = new VisitorController();
         VisitorDAO vdao = new VisitorDAO();
         Visitor vFalse;
-        try{
+        try {
             vc.SubscribeToNewsletter(v);
             vc.UnsubscribeFromNewsletter(v);
             vFalse = vdao.get(v.getEmailAddress());
@@ -78,16 +79,16 @@ public class VisitorTest {
         VisitorController vc = new VisitorController();
         BookingDAO bdao = new BookingDAO();
         ArrayList<Artwork> artworks = new ArrayList<>();
-        Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
+        Artwork art = new Artwork(5, "La passeggiata", "Monet", new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         int b_code = 170;
 
-        try{
+        try {
             vc.bookVisit(visit, visitor, b_code, 5);
             assertEquals(b_code, bdao.get(b_code).get(0).getCode());
         } catch (Exception e) {
@@ -103,16 +104,16 @@ public class VisitorTest {
 
         BookingDAO bdao = new BookingDAO();
         ArrayList<Artwork> artworks = new ArrayList<>();
-        Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
+        Artwork art = new Artwork(5, "La passeggiata", "Monet", new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         Booking b = new Booking(191, false, visit, visitor, 5);
 
-        try{
+        try {
             vc.bookVisit(visit, visitor, b.getCode(), 5);
             vc.payFee(b.getCode());
             assertTrue(bdao.get(b.getCode()).get(0).isPaid());
@@ -128,22 +129,22 @@ public class VisitorTest {
         VisitorController vc = new VisitorController();
 
         ArrayList<Artwork> artworks = new ArrayList<>();
-        Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
+        Artwork art = new Artwork(5, "La passeggiata", "Monet", new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         Booking b = new Booking(151, false, visit, visitor, 5);
         try {
             vc.bookVisit(visit, visitor, b.getCode(), 5);
             ArrayList<Booking> retrieved = vc.viewBookings(visitor);
 
-            assertEquals(retrieved.get(retrieved.size()-2).getCode(), b.getCode());
-            assertEquals(retrieved.get(retrieved.size()-2).getVisit().getCode(), b.getVisit().getCode());
-            assertEquals(retrieved.get(retrieved.size()-2).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
-            assertEquals(retrieved.get(retrieved.size()-2).isPaid(), b.isPaid());
+            assertEquals(retrieved.get(retrieved.size() - 2).getCode(), b.getCode());
+            assertEquals(retrieved.get(retrieved.size() - 2).getVisit().getCode(), b.getVisit().getCode());
+            assertEquals(retrieved.get(retrieved.size() - 2).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
+            assertEquals(retrieved.get(retrieved.size() - 2).isPaid(), b.isPaid());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -156,12 +157,12 @@ public class VisitorTest {
         VisitorController vc = new VisitorController();
 
         ArrayList<Artwork> artworks = new ArrayList<>();
-        Artwork art = new Artwork(5, "La passeggiata", "Monet",new OnDisplay());
+        Artwork art = new Artwork(5, "La passeggiata", "Monet", new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
+        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         Booking b = new Booking(181, false, visit, visitor, 5);
         ArrayList<Object> info_booking;
@@ -169,7 +170,7 @@ public class VisitorTest {
         Visitor vr_test;
         Visit v_test;
 
-        try{
+        try {
             vc.bookVisit(visit, visitor, b.getCode(), 5);
             info_booking = vc.getBookedTicketInfo(b.getCode(), visit);
             b_test = (Booking) info_booking.get(0);

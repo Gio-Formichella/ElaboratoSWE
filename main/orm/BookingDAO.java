@@ -32,7 +32,7 @@ public class BookingDAO {
         ArrayList<Booking> bookings = new ArrayList<>();
         VisitDAO vDAO = new VisitDAO();
         Visit visit;
-        while (rs.next()){
+        while (rs.next()) {
             int booking = rs.getInt("booking");
             boolean paid = rs.getBoolean("paid");
             int visit_code = rs.getInt("visit");
