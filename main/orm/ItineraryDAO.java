@@ -44,11 +44,8 @@ public class ItineraryDAO {
 
         Connection con = ConnectionManager.getConnection();
 
-        String sql = """
-                SELECT id, itinerary.name as i_name, code, artwork.name as a_name, artist as author, status, payload
-                FROM (Itinerary left join Artwork_Itinerary on id=itinerary) left join Artwork on artwork = code
-                WHERE id = ?""";
-        PreparedStatement ps = con.prepareStatement(sql);
+        String sql = "SELECT id, itinerary.name as i_name, code, artwork.name as a_name, artist as author, status, payload FROM (Itinerary left join Artwork_Itinerary on id=itinerary) left join Artwork on artwork = code WHERE id = ?";
+        PreparedStatement ps = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
 
@@ -67,18 +64,12 @@ public class ItineraryDAO {
                     String a_name = rs.getString("a_name");
                     String author = rs.getString("author");
 
-                    ArtworkStatus as = null;
-                    switch (rs.getInt("status")) {
-                        case 1:
-                            as = new OnDisplay();
-                            break;
-                        case 2:
-                            as = new UnderMaintenance(rs.getString("payload"));
-                            break;
-                        case 3:
-                            as = new OnLoan(rs.getString("payload"));
-                            break;
-                    }
+                    ArtworkStatus as = switch (rs.getInt("status")) {
+                        case 1 -> new OnDisplay();
+                        case 2 -> new UnderMaintenance(rs.getString("payload"));
+                        case 3 -> new OnLoan(rs.getString("payload"));
+                        default -> null;
+                    };
                     artworks.add(new Artwork(code, a_name, author, as));
                 }
             }

@@ -17,24 +17,17 @@ public class BookingDAOTest {
     public void insert(Booking b) throws SQLException {
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "INSERT INTO Booking (code, paid, number_of_tickets, visitor) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Booking (code, paid, number_of_tickets, visitor, visit) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, b.getCode());
         ps.setBoolean(2, b.isPaid());
         ps.setInt(3, b.getNumber_of_tickets());
         ps.setString(4, b.getVisitor().getEmailAddress());
+        ps.setInt(5, b.getVisit().getCode());
 
 
         ps.executeUpdate();
         ps.close();
-
-        String sql2 = "INSERT INTO Visit_Booking (visit, booking) VALUES (?, ?)";
-        PreparedStatement ps2 = con.prepareStatement(sql2);
-        ps2.setInt(1, b.getVisit().getCode());
-        ps2.setInt(2, b.getCode());
-
-        ps2.executeUpdate();
-        ps2.close();
     }
     @Test
     public void insert() {
@@ -48,7 +41,7 @@ public class BookingDAOTest {
         Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200,  itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         Booking b = new Booking(129, false, visit, visitor, 5);
-        ArrayList<Booking> retrieved = new ArrayList<>();
+        ArrayList<Booking> retrieved;
 
         try {
             insert(b);
@@ -213,9 +206,9 @@ public class BookingDAOTest {
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         int b_code = 165;
         ArrayList<Object> info_booking;
-        Booking b = null;
-        Visit v = null;
-        Visitor vr = null;
+        Booking b;
+        Visit v;
+        Visitor vr;
         try{
             bdao.addVisit_Booking(visit, visitor, b_code, 5);
             info_booking = bdao.getBookingVisit(b_code, visit);
