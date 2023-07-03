@@ -43,8 +43,6 @@ public class Visit {
         return itineraries;
     }
 
-
-
     public void addItinerary(Itinerary i){
         itineraries.add(i);
     }
