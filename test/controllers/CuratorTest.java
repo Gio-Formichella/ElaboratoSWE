@@ -1,9 +1,6 @@
-package test;
+package test.controllers;
 
-import main.DomainModel.Artwork;
-import main.DomainModel.Itinerary;
-import main.DomainModel.OnDisplay;
-import main.DomainModel.UnderMaintenance;
+import main.DomainModel.*;
 import main.business_logic.Curator;
 import main.orm.ArtworkDAO;
 import main.orm.ConnectionManager;
@@ -100,6 +97,7 @@ class CuratorTest {
         Artwork a = new Artwork(-1, "TestArtwork", "Gio", new OnDisplay());
         OnDisplay od = new OnDisplay();
         UnderMaintenance um = new UnderMaintenance("18/07/2023");
+        OnLoan ol = new OnLoan("Museo Pecci");
         ArtworkDAO dao = new ArtworkDAO();
         try {
             dao.insert(a);
@@ -112,6 +110,11 @@ class CuratorTest {
             assertEquals(a.getStatus(), um.getStatus());
             Artwork retrieved2 = dao.get(a.getCode());
             assertEquals(retrieved2.getStatus(), a.getStatus());
+
+            c.modifyStatus(a, ol);
+            assertEquals(a.getStatus(), ol.getStatus());
+            Artwork retrieved3 = dao.get(a.getCode());
+            assertEquals(retrieved3.getStatus(), a.getStatus());
         } catch (SQLException | MessagingException e) {
             e.printStackTrace();
         } finally {
