@@ -115,7 +115,7 @@ public class BookingDAOTest {
         Booking b = new Booking(121, false, visit, visitor, 5);
         try {
             insert(b);
-            ArrayList<Booking> retrieved = dao.getBookingVisitor(visitor);
+            ArrayList<Booking> retrieved = dao.getVisitorBookings(visitor);
             assertEquals(retrieved.get(retrieved.size() - 2).getCode(), b.getCode());
             assertEquals(retrieved.get(retrieved.size() - 2).getVisit().getCode(), b.getVisit().getCode());
             assertEquals(retrieved.get(retrieved.size() - 2).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());

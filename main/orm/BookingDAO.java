@@ -22,7 +22,7 @@ public class BookingDAO {
         ps1.close();
     }
 
-    public ArrayList<Booking> getBookingVisitor(Visitor v) throws SQLException, ParseException {
+    public ArrayList<Booking> getVisitorBookings(Visitor v) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
         String sql = "SELECT DISTINCT B.code as booking, B.paid, B.visit as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visitor as VR, Booking as B  WHERE VR.email = B.visitor  AND B.visitor = ?";
         PreparedStatement ps = con.prepareStatement(sql);

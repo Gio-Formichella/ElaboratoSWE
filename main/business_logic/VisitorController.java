@@ -14,7 +14,7 @@ public class VisitorController {
 
     public ArrayList<Booking> viewBookings(Visitor v) throws SQLException, ParseException {
         BookingDAO bdao = new BookingDAO();
-        return bdao.getBookingVisitor(v);
+        return bdao.getVisitorBookings(v);
     }
 
     public void cancelBooking(int code) throws SQLException, ParseException {
