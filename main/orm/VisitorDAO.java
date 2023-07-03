@@ -56,7 +56,7 @@ public class VisitorDAO {
 
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "SELECT email, Visitor.name as name, surname, newsletter from visitor join booking on visitor=visitor.email join visit_booking on booking=booking.code where visit = ?";
+        String sql = "SELECT email, Visitor.name as name, surname, newsletter from visitor join booking on visitor=visitor.email join visit on visit.code=booking.visit where visit = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, v.getCode());
         ResultSet rs = ps.executeQuery();

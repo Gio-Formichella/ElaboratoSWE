@@ -33,10 +33,9 @@ public class BookingOffice {
     public void cancelVisit(int code) throws SQLException, MessagingException, ParseException{
         VisitDAO dao = new VisitDAO();
         Visit v = dao.getTransitive(code);//serve per il messaggio di notifica
-        dao.delete(code);
         VisitorDAO vdao = new VisitorDAO();
         ArrayList<Visitor> toBeNotifiedVisitors = vdao.getToBeNotifiedVisitors(v);
-
+        dao.delete(code);
         //invio email
         if (toBeNotifiedVisitors.size()>0){
             Properties properties = new Properties();
