@@ -137,7 +137,7 @@ public class VisitDAO {
 
     public int getBookedTickets(Visit v) throws SQLException {
         Connection con = ConnectionManager.getConnection();
-        String sql = "SELECT SUM(number_of_tickets) as total_tickets FROM Visit as V, Booking as B WHERE B.visit = ? GROUP BY B.visit";
+        String sql = "SELECT SUM(number_of_tickets) as total_tickets FROM Booking as B WHERE B.visit = ? GROUP BY B.visit";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, v.getCode());
         ResultSet rs = ps.executeQuery();

@@ -19,7 +19,7 @@ public class VisitorController {
 
     public void cancelBooking(int code) throws SQLException, ParseException {
         BookingDAO dao = new BookingDAO();
-        if (dao.get(code) != null) {
+        if (dao.get(code) == null) {
             System.out.println("La prenotazione richiesta non è presente");
         } else {
             dao.delete(code);
