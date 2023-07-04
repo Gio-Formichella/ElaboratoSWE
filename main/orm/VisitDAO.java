@@ -93,6 +93,32 @@ public class VisitDAO {
 
         Connection con = ConnectionManager.getConnection();
 
+        VisitDAO vDAO = new VisitDAO();
+        ArrayList<Itinerary> newItineraries = v.getItineraries();
+        ArrayList<Itinerary> oldItineraries = vDAO.getTransitive(v.getCode()).getItineraries();
+        
+        for (Itinerary i : oldItineraries) {//deletes tuples for every removed itinerary
+            if(!newItineraries.contains(i)){
+                String sql = "DELETE FROM visit_itinerary WHERE itinerary = ? AND visit = ?";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setInt(1, i.getId());
+                ps.setInt(2, v.getCode());
+                ps.executeUpdate();
+                ps.close();
+                newItineraries.remove(i);
+            }
+        }
+
+        while(!newItineraries.isEmpty()){//instantiates tuples for every new itinerary
+            String sql = "INSERT INTO visit_itinerary (itinerary, visit) VALUES (?, ?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, newItineraries.get(0).getId());
+            ps.setInt(2, v.getCode());
+            ps.executeUpdate();
+            ps.close();
+            newItineraries.remove(0);
+        }
+
         String sql = "UPDATE Visit SET date_ = ?, time_ = ?, max_visitors = ?, price = ? WHERE code = ?";
         java.util.Date utilDate = format.parse(v.getDate());
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());

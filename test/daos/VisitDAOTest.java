@@ -91,13 +91,18 @@ public class VisitDAOTest {
     void update(){
         VisitDAO dao = new VisitDAO();
         Visit v = new Visit(2, "2020-12-12", "12:00:00", 100, 10.0f, new ArrayList<>());
-        Itinerary i = new Itinerary(2, "Egitto", new ArrayList<>());
-        v.addItinerary(i);
+        Itinerary i1 = new Itinerary(2, "Egitto", new ArrayList<>());
+        Itinerary i2 = new Itinerary(3, "Egitto", new ArrayList<>());
+        v.addItinerary(i1);
+        v.addItinerary(i2);
         ItineraryDAO iDao = new ItineraryDAO();
         try{
-            iDao.insert(i);
+            iDao.insert(i1);
+            iDao.insert(i2);
             dao.insert(v);
-            Visit v2=new Visit(2, "2020-12-15", "15:00:00", 200, 20.0f, new ArrayList<>());
+            ArrayList<Itinerary> newItineraries = new ArrayList<>();
+            newItineraries.add(i1);
+            Visit v2=new Visit(2, "2020-12-15", "15:00:00", 200, 20.0f, newItineraries); 
             dao.update(v2);
             Visit retrieved = dao.getTransitive(v.getCode());
             assertEquals(retrieved.getDate(), v2.getDate());
@@ -112,7 +117,8 @@ public class VisitDAOTest {
             e.printStackTrace();
         }finally{
             try{
-                iDao.delete(i);
+                iDao.delete(i1);
+                iDao.delete(i2);
                 dao.delete(v.getCode());
             }catch(SQLException e){
                 e.printStackTrace();
