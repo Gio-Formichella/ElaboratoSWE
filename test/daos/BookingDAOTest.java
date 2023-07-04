@@ -43,16 +43,16 @@ public class BookingDAOTest {
         Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         Booking b = new Booking(129, false, visit, visitor, 5);
-        ArrayList<Booking> retrieved;
+        Booking retrieved;
 
         try {
             insert(b);
 
             retrieved = dao.get(b.getCode());
-            assertEquals(retrieved.get(retrieved.size() - 1).getCode(), b.getCode());
-            assertEquals(retrieved.get(retrieved.size() - 1).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
-            assertEquals(retrieved.get(retrieved.size() - 1).getVisit().getCode(), b.getVisit().getCode());
-            assertEquals(retrieved.get(retrieved.size() - 1).isPaid(), b.isPaid());
+            assertEquals(retrieved.getCode(), b.getCode());
+            assertEquals(retrieved.getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
+            assertEquals(retrieved.getVisit().getCode(), b.getVisit().getCode());
+            assertEquals(retrieved.isPaid(), b.isPaid());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -81,7 +81,7 @@ public class BookingDAOTest {
         try {
             insert(b);
             dao.delete(b.getCode());
-            assertTrue(dao.get(b.getCode()).isEmpty());
+            assertNull(dao.get(b.getCode()));
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -149,9 +149,8 @@ public class BookingDAOTest {
         try {
             insert(b);
             bdao.setPaid(b.getCode());
-            ArrayList<Booking> bookings = bdao.get(b.getCode());
-            Booking bTrue = bookings.get(0);
-            assertTrue(bTrue.isPaid());
+            Booking booking = bdao.get(b.getCode());
+            assertTrue(booking.isPaid());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -162,7 +161,7 @@ public class BookingDAOTest {
     }
 
     @Test
-    public void addVisit_Booking() {
+    public void addBooking() {
         BookingDAO dao = new BookingDAO();
         ArrayList<Artwork> artworks = new ArrayList<>();
         Artwork art = new Artwork(5, "La passeggiata", "Monet", new OnDisplay());
@@ -173,16 +172,16 @@ public class BookingDAOTest {
         Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
         Visitor visitor = new Visitor("Davide", "Lombardi", "davide.lombardi2@stud.unifi.it", false);
         int b_code = 190;
-        ArrayList<Booking> retrieved;
+        Booking retrieved;
 
         try {
-            dao.addVisit_Booking(visit, visitor, b_code, 5);
+            dao.addBooking(visit, visitor, b_code, 5);
 
             retrieved = dao.get(b_code);
-            assertEquals(retrieved.get(0).getCode(), b_code);
-            assertEquals(retrieved.get(0).getVisitor().getEmailAddress(), visitor.getEmailAddress());
-            assertEquals(retrieved.get(0).getVisit().getCode(), visit.getCode());
-            assertFalse(retrieved.get(0).isPaid());
+            assertEquals(retrieved.getCode(), b_code);
+            assertEquals(retrieved.getVisitor().getEmailAddress(), visitor.getEmailAddress());
+            assertEquals(retrieved.getVisit().getCode(), visit.getCode());
+            assertFalse(retrieved.isPaid());
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ParseException e) {
@@ -213,7 +212,7 @@ public class BookingDAOTest {
         Visit v;
         Visitor vr;
         try {
-            bdao.addVisit_Booking(visit, visitor, b_code, 5);
+            bdao.addBooking(visit, visitor, b_code, 5);
             info_booking = bdao.getBookingVisit(b_code, visit);
             b = (Booking) info_booking.get(0);
             v = (Visit) info_booking.get(1);

@@ -19,7 +19,7 @@ public class VisitorController {
 
     public void cancelBooking(int code) throws SQLException, ParseException {
         BookingDAO dao = new BookingDAO();
-        if (dao.get(code).isEmpty()) {
+        if (dao.get(code) != null) {
             System.out.println("La prenotazione richiesta non è presente");
         } else {
             dao.delete(code);
@@ -45,8 +45,8 @@ public class VisitorController {
         VisitDAO vdao = new VisitDAO();
         BookingDAO bdao = new BookingDAO();
         int booked_tickets = vdao.getBookedTickets(v);
-        if (bdao.get(code).isEmpty() && v.getMaxVisitors() >= (booked_tickets + num_visitors)) {
-            bdao.addVisit_Booking(v, vr, code, num_visitors);
+        if (bdao.get(code) != null && v.getMaxVisitors() >= (booked_tickets + num_visitors)) {
+            bdao.addBooking(v, vr, code, num_visitors);
         } else {
             throw new Exception("Non ci sono posti liberi");
         }

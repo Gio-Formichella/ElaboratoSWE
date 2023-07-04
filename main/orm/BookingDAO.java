@@ -48,16 +48,15 @@ public class BookingDAO {
         return bookings;
     }
 
-    public ArrayList<Booking> get(int code) throws SQLException, ParseException {
+    public Booking get(int code) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
         String sql = "SELECT DISTINCT B.paid as paid, B.visit as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visitor as VR, Booking as B WHERE B.visitor = VR.email AND B.code = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ResultSet rs = ps.executeQuery();
 
-        ArrayList<Booking> bookings = new ArrayList<>();
         VisitDAO vDAO = new VisitDAO();
-        Visit visit = null;
+        Visit visit;
         Booking b = null;
         while (rs.next()) {
             boolean paid = rs.getBoolean("paid");
@@ -70,10 +69,9 @@ public class BookingDAO {
             Visitor visitor = new Visitor(name, surname, email, subscriber);
             visit = vDAO.getTransitive(visit_code);
             b = new Booking(code, paid, visit, visitor, num_of_tickets);
-            bookings.add(b);
 
         }
-        return bookings;
+        return b;
 
     }
 
@@ -102,7 +100,7 @@ public class BookingDAO {
         return info_booking;
     }
 
-    public void addVisit_Booking(Visit v, Visitor vr, int code, int number_of_tickets) throws SQLException {
+    public void addBooking(Visit v, Visitor vr, int code, int number_of_tickets) throws SQLException {
         Connection con = ConnectionManager.getConnection();
 
 

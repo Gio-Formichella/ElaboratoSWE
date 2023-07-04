@@ -33,7 +33,7 @@ public class VisitorTest {
         try {
             v.bookVisit(visit, visitor, b.getCode(), 4);
             v.cancelBooking(b.getCode());
-            assertTrue(bdao.get(b.getCode()).isEmpty());
+            assertNull(bdao.get(b.getCode()));
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -90,7 +90,7 @@ public class VisitorTest {
 
         try {
             vc.bookVisit(visit, visitor, b_code, 5);
-            assertEquals(b_code, bdao.get(b_code).get(0).getCode());
+            assertEquals(b_code, bdao.get(b_code).getCode());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -116,7 +116,7 @@ public class VisitorTest {
         try {
             vc.bookVisit(visit, visitor, b.getCode(), 5);
             vc.payFee(b.getCode());
-            assertTrue(bdao.get(b.getCode()).get(0).isPaid());
+            assertTrue(bdao.get(b.getCode()).isPaid());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
