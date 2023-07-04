@@ -56,7 +56,8 @@ public class Curator {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(emailAddress));
             message.setSubject("Nuova opera");
-            message.setText("Nuova opera "+a.getName() +" dell'autore " + a.getAuthor() + " con stato " + a.getStatus() + " presente nell'itinerario " + i.getName());
+            message.setContent("<div>"+"Nuova opera " + "<span style='color:red;'>" + a.getName() + "</span>" + " dell'autore " + "<span style='color:red;'>" + a.getAuthor() + "</span>" + " con stato " + "<span style='color:red;'>" + a.getStatus() + "</span>" + " presente nell'itinerario " +"<span style='color:red;'>" + i.getName() + "</span>" + "</div>", "text/html");
+
 
             for(Visitor subscriber : nlsubscribers){
                 Address addressTo = new InternetAddress(subscriber.getEmailAddress());
