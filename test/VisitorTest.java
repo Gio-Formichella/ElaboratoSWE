@@ -172,7 +172,7 @@ public class VisitorTest {
 
         try {
             vc.bookVisit(visit, visitor, b.getCode(), 5);
-            info_booking = vc.getBookedTicketInfo(b.getCode(), visit);
+            info_booking = vc.getBookedTicketInfo(b.getCode());
             b_test = (Booking) info_booking.get(0);
             v_test = (Visit) info_booking.get(1);
             vr_test = (Visitor) info_booking.get(2);
@@ -185,6 +185,5 @@ public class VisitorTest {
         } finally {
             vc.cancelBooking(b.getCode());
         }
-
     }
 }

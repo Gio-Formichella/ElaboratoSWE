@@ -69,21 +69,21 @@ public class BookingDAO {
             Visitor visitor = new Visitor(name, surname, email, subscriber);
             visit = vDAO.getTransitive(visit_code);
             b = new Booking(code, paid, visit, visitor, num_of_tickets);
-
         }
         return b;
-
     }
 
-    public ArrayList<Object> getBookingVisit(int code, Visit v) throws SQLException, ParseException {
+    public ArrayList<Object> getBookingVisit(int code) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
-        String sql = "SELECT DISTINCT B.paid as paid, B.visit as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visitor as VR, Booking as B WHERE B.visitor = VR.email AND B.code = ? AND B.visit = ?";
+        String sql = "SELECT DISTINCT B.paid as paid, B.visit as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visitor as VR, Booking as B WHERE B.visitor = VR.email AND B.code = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, code);
-        ps.setInt(2, v.getCode());
         ResultSet rs = ps.executeQuery();
         ArrayList<Object> info_booking = new ArrayList<>();
         Booking b;
+        Visit visit;
+        VisitDAO vDAO = new VisitDAO();
+
         while (rs.next()) {
             boolean paid = rs.getBoolean("paid");
             String email = rs.getString("email");
@@ -91,10 +91,12 @@ public class BookingDAO {
             String surname = rs.getString("surname");
             boolean subscriber = rs.getBoolean("newsletter");
             int num_of_tickets = rs.getInt("number_of_tickets");
+            int visit_code = rs.getInt("visit");
             Visitor visitor = new Visitor(name, surname, email, subscriber);
-            b = new Booking(code, paid, v, visitor, num_of_tickets);
+            visit = vDAO.getTransitive(visit_code);
+            b = new Booking(code, paid, visit, visitor, num_of_tickets);
             info_booking.add(b);
-            info_booking.add(v);
+            info_booking.add(visit);
             info_booking.add(visitor);
         }
         return info_booking;

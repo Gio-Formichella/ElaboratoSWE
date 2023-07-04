@@ -213,7 +213,7 @@ public class BookingDAOTest {
         Visitor vr;
         try {
             bdao.addBooking(visit, visitor, b_code, 5);
-            info_booking = bdao.getBookingVisit(b_code, visit);
+            info_booking = bdao.getBookingVisit(b_code);
             b = (Booking) info_booking.get(0);
             v = (Visit) info_booking.get(1);
             vr = (Visitor) info_booking.get(2);
