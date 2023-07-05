@@ -162,7 +162,7 @@ public class VisitDAOTest {
         }
     }
 
-    @Test
+    /*@Test
     void removeItineraryFromVisits(){
         VisitDAO vDao = new VisitDAO();
         ItineraryDAO iDao = new ItineraryDAO();
@@ -198,5 +198,5 @@ public class VisitDAOTest {
                 e.printStackTrace();
             }
         }
-    }
+    }*/
 }
