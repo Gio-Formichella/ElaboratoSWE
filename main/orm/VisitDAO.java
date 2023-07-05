@@ -148,20 +148,4 @@ public class VisitDAO {
         ps.close();
         return visits;
     }
-
-    /*public void removeItineraryFromVisits(int id)throws SQLException{
-        Connection con = ConnectionManager.getConnection();
-        PreparedStatement ps= con.prepareStatement("SELECT booking.visit visit FROM visit_itinerary join booking on visit_itinerary.visit=booking.visit WHERE itinerary = ?");
-        ps.setInt(1, id);
-        ResultSet rs = ps.executeQuery();
-        if(rs.next()){//if the itinerary is booked, it can't be deleted -> curator gets an error message
-            throw new SQLException("can't delete itinerary because the visit is already booked");
-        }
-        ps.close();
-        String sql = "DELETE FROM visit_itinerary WHERE itinerary = ?";//if no exception is thrown -> delete the itinerary
-        ps = con.prepareStatement(sql);
-        ps.setInt(1, id);
-        ps.executeUpdate();
-        ps.close();
-    }*/
 }

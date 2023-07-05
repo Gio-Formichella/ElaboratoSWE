@@ -7,12 +7,20 @@ import main.orm.VisitDAO;
 import main.orm.VisitorDAO;
 
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
+import org.junit.platform.reporting.shadow.org.opentest4j.reporting.events.core.Data;
 
 
 public class Curator {
@@ -57,7 +65,25 @@ public class Curator {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(emailAddress));
             message.setSubject("Nuova opera");
-            message.setText("Nuova opera "+a.getName() +" dell'autore " + a.getAuthor() + " con stato " + a.getStatus() + " presente nell'itinerario " + i.getName());
+            MimeMultipart multipart = new MimeMultipart("related");
+            BodyPart messageBodyPart = new MimeBodyPart();
+            String artworkData="Nuova opera "+a.getName() +" dell'autore " + a.getAuthor() + " con stato " + a.getStatus() + " presente nell'itinerario " + i.getName();
+            String htmlText = "<img src=\"cid:image\" alt=\"Museo di SWE\" style=\"width: 300px; height: 100px; \">\r\n" + //
+                    "<h5 style=\"color: gray; font-family: Arial,sans-serif\">"+artworkData+"</h5>\r\n" + //
+                    "<div style=\"margin-top: 5em\">\r\n" + //
+                    "  <p style=\"color: gray; font-family: Arial,sans-serif; font-size: 0.7em\">Contatti:</p>\r\n" + //
+                    "  <p style=\"color: gray; font-family: Arial,sans-serif; font-size: 0.7em\">Telefono: 1234567890</p>\r\n" + //
+                    "  <p style=\"color: gray; font-family: Arial,sans-serif; font-size: 0.7em\">Email: museoswe@virgilio.it</p>\r\n" + //
+                    "</div>";
+            messageBodyPart.setContent(htmlText, "text/html");
+            multipart.addBodyPart(messageBodyPart);
+            messageBodyPart = new MimeBodyPart();
+            DataSource fds = new FileDataSource("C:\\Users\\micha\\VS_Projects\\ElaboratoSWE\\main\\business_logic\\imgs\\logo.png");
+            messageBodyPart.setDataHandler(new DataHandler(fds));
+            messageBodyPart.setHeader("Content-ID", "<image>");
+            multipart.addBodyPart(messageBodyPart);
+            message.setContent(multipart);
+            //message.setContent("Nuova opera "+a.getName() +" dell'autore " + a.getAuthor() + " con stato " + a.getStatus() + " presente nell'itinerario " + i.getName(), "text/html");
 
             for(Visitor subscriber : nlsubscribers){
                 Address addressTo = new InternetAddress(subscriber.getEmailAddress());
