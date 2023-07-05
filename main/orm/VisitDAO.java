@@ -149,7 +149,7 @@ public class VisitDAO {
         return visits;
     }
 
-    public void removeItineraryFromVisits(int id)throws SQLException{
+    /*public void removeItineraryFromVisits(int id)throws SQLException{
         Connection con = ConnectionManager.getConnection();
         PreparedStatement ps= con.prepareStatement("SELECT booking.visit visit FROM visit_itinerary join booking on visit_itinerary.visit=booking.visit WHERE itinerary = ?");
         ps.setInt(1, id);
@@ -163,5 +163,5 @@ public class VisitDAO {
         ps.setInt(1, id);
         ps.executeUpdate();
         ps.close();
-    }
+    }*/
 }

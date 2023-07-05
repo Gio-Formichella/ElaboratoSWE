@@ -147,8 +147,6 @@ public class Curator {
     }
 
     public void cancelItinerary(Itinerary i) throws SQLException{
-        VisitDAO vdao = new VisitDAO();
-        vdao.removeItineraryFromVisits(i.getId());
         ItineraryDAO dao = new ItineraryDAO();
         dao.delete(i);
     }
