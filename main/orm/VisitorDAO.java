@@ -71,4 +71,50 @@ public class VisitorDAO {
         }
         return visitors;
     }
+
+    public void setSubscriber(Visitor v) throws SQLException {
+        Connection con = ConnectionManager.getConnection();
+
+        String sql = "UPDATE Visitor SET newsletter = TRUE WHERE email = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, v.getEmailAddress());
+
+        ps.executeUpdate();
+        ps.close();
+
+    }
+
+    public void cancelSubscriber(Visitor v) throws SQLException {
+        Connection con = ConnectionManager.getConnection();
+
+        String sql = "UPDATE Visitor SET newsletter = FALSE WHERE email = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, v.getEmailAddress());
+
+        ps.executeUpdate();
+        ps.close();
+
+    }
+
+    public Visitor get(String emailCode) throws SQLException {
+        Connection con = ConnectionManager.getConnection();
+        Visitor visitor = null;
+
+        String sql = "SELECT email, name, surname, newsletter FROM Visitor WHERE email = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, emailCode);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            String email = rs.getString("email");
+            String name = rs.getString("name");
+            String surname = rs.getString("surname");
+            boolean subscriber = rs.getBoolean("newsletter");
+            visitor = new Visitor(name, surname, email, subscriber);
+        }
+
+        return visitor;
+    }
+
 }
+

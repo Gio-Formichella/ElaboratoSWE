@@ -10,7 +10,7 @@ public class Visit {
     private float price;
     private ArrayList<Itinerary> itineraries;
 
-    public Visit(int code, String date, String time, int maxVisitors, float price, ArrayList<Itinerary> itineraries){
+    public Visit(int code, String date, String time, int maxVisitors, float price, ArrayList<Itinerary> itineraries) {
         this.code = code;
         this.date = date;
         this.time = time;
@@ -19,29 +19,29 @@ public class Visit {
         this.itineraries = itineraries;
     }
 
-    public int getCode(){
+    public int getCode() {
         return code;
     }
 
-    public String getDate(){
+    public String getDate() {
         return date;
     }
 
-    public String getTime(){
+    public String getTime() {
         return time;
     }
 
-    public int getMaxVisitors(){
+    public int getMaxVisitors() {
         return maxVisitors;
     }
 
-    public float getPrice(){
+    public float getPrice() {
         return price;
     }
 
-    public ArrayList<Itinerary> getItineraries(){
+    public ArrayList<Itinerary> getItineraries() {
         ArrayList<Itinerary> itinerariesCopy = new ArrayList<>();
-        for (Itinerary i : itineraries){
+        for (Itinerary i : itineraries) {
             itinerariesCopy.add(i);
         }
         return itinerariesCopy;

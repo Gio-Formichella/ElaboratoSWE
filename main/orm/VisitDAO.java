@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 
 public class VisitDAO {
-    
+
     public Visit getTransitive(int code) throws SQLException, ParseException { //also instantiates Itineraries
         Connection con = ConnectionManager.getConnection();
 
@@ -24,10 +24,10 @@ public class VisitDAO {
         if(rs.next()){
             v = new Visit(rs.getInt("code"), rs.getDate("date_").toString(), rs.getString("time_"), rs.getInt("max_visitors"), rs.getFloat("price"), itineraries);
             do {//uses ItineraryDAO to instantiate Itinerary objects
-            Itinerary i = iDAO.getTransitive(rs.getInt("itinerary"));
-            v.addItinerary(i);  
+                Itinerary i = iDAO.getTransitive(rs.getInt("itinerary"));
+                v.addItinerary(i);
             }while (rs.next());
-            
+
         }else{
             return null;
         }
@@ -164,4 +164,21 @@ public class VisitDAO {
         ps.executeUpdate();
         ps.close();
     }*/
+
+    public int getBookedTickets(Visit v) throws SQLException {
+        Connection con = ConnectionManager.getConnection();
+        String sql = "SELECT SUM(number_of_tickets) as total_tickets FROM Booking as B WHERE B.visit = ? GROUP BY B.visit";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, v.getCode());
+        ResultSet rs = ps.executeQuery();
+        int total_tickets;
+
+        if (rs.next()) {
+            total_tickets = rs.getInt("total_tickets");
+        } else {
+            total_tickets = 0;
+        }
+
+        return total_tickets;
+    }
 }
