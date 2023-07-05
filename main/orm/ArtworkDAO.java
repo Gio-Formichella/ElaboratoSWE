@@ -84,7 +84,7 @@ public class ArtworkDAO {
         ResultSet rs = ps.executeQuery();
 
         ArrayList<Artwork> artworks = new ArrayList<>();
-        if (rs.next()) {
+        while (rs.next()) {
             int code = rs.getInt("code");
             String name = rs.getString("name");
             String artist = rs.getString("artist");

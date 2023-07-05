@@ -2,10 +2,12 @@ package test.controllers;
 
 import main.DomainModel.*;
 import main.business_logic.VisitorController;
+import main.orm.ArtworkDAO;
 import main.orm.BookingDAO;
 import main.orm.VisitorDAO;
 import org.junit.Test;
 
+import java.sql.Array;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -184,6 +186,26 @@ public class VisitorTest {
             e.printStackTrace();
         } finally {
             vc.cancelBooking(b.getCode());
+        }
+    }
+
+    @Test
+    public void viewArtworks() throws SQLException {
+        VisitorController vc = new VisitorController();
+
+        ArtworkDAO adao = new ArtworkDAO();
+        Artwork a = new Artwork(121, "Gioconda", "Leonardo da Vinci", new OnDisplay());
+        ArrayList<Artwork> artworks = new ArrayList<>();
+        try {
+            adao.insert(a);
+            artworks = vc.viewArtworks();
+            assertEquals(a.getCode(), artworks.get(artworks.size()-1).getCode());
+            assertEquals(a.getName(), artworks.get(artworks.size()-1).getName());
+            assertEquals(a.getAuthor(), artworks.get(artworks.size()-1).getAuthor());
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            adao.delete(a);
         }
     }
 }
