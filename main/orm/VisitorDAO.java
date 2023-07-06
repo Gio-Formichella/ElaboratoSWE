@@ -116,5 +116,36 @@ public class VisitorDAO {
         return visitor;
     }
 
+    public void delete(String email) throws SQLException {
+        Connection con = ConnectionManager.getConnection();
+
+        String sql1 = "DELETE FROM Visitor WHERE email = ?";
+        PreparedStatement ps1 = con.prepareStatement(sql1);
+        ps1.setString(1, email);
+        ps1.executeUpdate();
+        ps1.close();
+
+        String sql2 = "DELETE FROM Booking WHERE visitor = ?";
+        PreparedStatement ps2 = con.prepareStatement(sql2);
+        ps2.setString(1, email);
+        ps2.executeUpdate();
+        ps2.close();
+
+    }
+
+    public void insert(Visitor v) throws SQLException {
+        Connection con = ConnectionManager.getConnection();
+
+        String sql = "INSERT INTO Visitor (email, name, surname, newsletter) VALUES (?, ?, ?, ?)";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, v.getEmailAddress());
+        ps.setString(2, v.getName());
+        ps.setString(3, v.getSurname());
+        ps.setBoolean(4, v.isNLSubscriber());
+
+        ps.executeUpdate();
+        ps.close();
+    }
+
 }
 
