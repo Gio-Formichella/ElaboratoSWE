@@ -42,18 +42,17 @@ public class VisitDAO {
         String sql = "INSERT INTO Visit (code, date_, time_, max_visitors, price) VALUES ( ?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
         ArrayList<Itinerary> itineraries = v.getItineraries();
-        java.util.Date utilDate = format.parse(v.getDate());
-        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-        LocalTime localTime = LocalTime.parse(v.getTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
-        ps.setInt(1, v.getCode());
-        ps.setDate(2, sqlDate);
-        ps.setTime(3, java.sql.Time.valueOf(localTime));
-        ps.setInt(4, v.getMaxVisitors());
-        ps.setFloat(5, v.getPrice());
-
         if(itineraries.isEmpty()) {
             throw new SQLException("can't create a visit with no itineraries");
         }else{
+            java.util.Date utilDate = format.parse(v.getDate());
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+            LocalTime localTime = LocalTime.parse(v.getTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
+            ps.setInt(1, v.getCode());
+            ps.setDate(2, sqlDate);
+            ps.setTime(3, java.sql.Time.valueOf(localTime));
+            ps.setInt(4, v.getMaxVisitors());
+            ps.setFloat(5, v.getPrice());
             ps.executeUpdate();
             ps.close();
             ps=con.prepareStatement("INSERT INTO visit_itinerary (itinerary, visit) VALUES (?, ?)");
