@@ -22,12 +22,12 @@ public class BookingDAOTest {
         VisitDAO vidao = new VisitDAO();
         ArtworkDAO adao = new ArtworkDAO();
         ArrayList<Artwork> artworks = new ArrayList<>();
-        Artwork art = new Artwork(5, "Gioconda", "Leonardo da Vinci", new OnDisplay());
+        Artwork art = new Artwork(8, "Gioconda", "Leonardo da Vinci", new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(798, "2021-11-25", "12:54:32", 300, 100, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 128;
         try {
@@ -52,17 +52,23 @@ public class BookingDAOTest {
     public void getBookingVisitor() {
         BookingDAO dao = new BookingDAO();
         VisitorDAO vdao = new VisitorDAO();
+        ItineraryDAO idao = new ItineraryDAO();
+        VisitDAO vidao = new VisitDAO();
+        ArtworkDAO adao = new ArtworkDAO();
         ArrayList<Artwork> artworks = new ArrayList<>();
-        Artwork art = new Artwork(5, "La passeggiata", "Monet", new OnDisplay());
+        Artwork art = new Artwork(8, "Gioconda", "Leonardo da Vinci", new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 121;
         try {
             vdao.insert(visitor);
+            adao.insert(art);
+            idao.insert(it);
+            vidao.insert(visit);
             dao.addBooking(visit, visitor, b_code, 5);
             ArrayList<Booking> retrieved = dao.getVisitorBookings(visitor);
             assertEquals(retrieved.get(0).getCode(), b_code);
@@ -75,6 +81,9 @@ public class BookingDAOTest {
             try {
                 dao.delete(b_code);
                 vdao.delete(visitor.getEmailAddress());
+                vidao.delete(visit.getCode());
+                idao.delete(it);
+                adao.delete(art);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -85,18 +94,24 @@ public class BookingDAOTest {
     public void setPaid() throws SQLException {
         BookingDAO bdao = new BookingDAO();
         VisitorDAO vdao = new VisitorDAO();
+        ItineraryDAO idao = new ItineraryDAO();
+        VisitDAO vidao = new VisitDAO();
+        ArtworkDAO adao = new ArtworkDAO();
         ArrayList<Artwork> artworks = new ArrayList<>();
-        Artwork art = new Artwork(5, "La passeggiata", "Monet", new OnDisplay());
+        Artwork art = new Artwork(8, "Gioconda", "Leonardo da Vinci", new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 177;
 
         try {
             vdao.insert(visitor);
+            adao.insert(art);
+            idao.insert(it);
+            vidao.insert(visit);
             bdao.addBooking(visit, visitor, b_code, 4);
             bdao.setPaid(b_code);
             Booking booking = bdao.get(b_code);
@@ -106,6 +121,9 @@ public class BookingDAOTest {
         } finally {
             bdao.delete(b_code);
             vdao.delete(visitor.getEmailAddress());
+            vidao.delete(visit.getCode());
+            idao.delete(it);
+            adao.delete(art);
         }
     }
 
@@ -113,19 +131,25 @@ public class BookingDAOTest {
     public void addBooking() {
         BookingDAO dao = new BookingDAO();
         VisitorDAO vdao = new VisitorDAO();
+        ItineraryDAO idao = new ItineraryDAO();
+        VisitDAO vidao = new VisitDAO();
+        ArtworkDAO adao = new ArtworkDAO();
         ArrayList<Artwork> artworks = new ArrayList<>();
-        Artwork art = new Artwork(5, "La passeggiata", "Monet", new OnDisplay());
+        Artwork art = new Artwork(8, "Gioconda", "Leonardo da Vinci", new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 190;
         Booking retrieved;
 
         try {
             vdao.insert(visitor);
+            adao.insert(art);
+            idao.insert(it);
+            vidao.insert(visit);
             dao.addBooking(visit, visitor, b_code, 5);
 
             retrieved = dao.get(b_code);
@@ -139,6 +163,9 @@ public class BookingDAOTest {
             try {
                 dao.delete(b_code);
                 vdao.delete(visitor.getEmailAddress());
+                vidao.delete(visit.getCode());
+                idao.delete(it);
+                adao.delete(art);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -149,13 +176,16 @@ public class BookingDAOTest {
     public void getBookingVisit() {
         BookingDAO bdao = new BookingDAO();
         VisitorDAO vdao = new VisitorDAO();
+        ItineraryDAO idao = new ItineraryDAO();
+        VisitDAO vidao = new VisitDAO();
+        ArtworkDAO adao = new ArtworkDAO();
         ArrayList<Artwork> artworks = new ArrayList<>();
-        Artwork art = new Artwork(5, "La passeggiata", "Monet", new OnDisplay());
+        Artwork art = new Artwork(8, "Gioconda", "Leonardo da Vinci", new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 165;
         ArrayList<Object> info_booking;
@@ -164,6 +194,9 @@ public class BookingDAOTest {
         Visitor vr;
         try {
             vdao.insert(visitor);
+            adao.insert(art);
+            idao.insert(it);
+            vidao.insert(visit);
             bdao.addBooking(visit, visitor, b_code, 5);
             info_booking = bdao.getBookingVisit(b_code);
             b = (Booking) info_booking.get(0);
@@ -178,6 +211,9 @@ public class BookingDAOTest {
         try {
             bdao.delete(b_code);
             vdao.delete(visitor.getEmailAddress());
+            vidao.delete(visit.getCode());
+            idao.delete(it);
+            adao.delete(art);
         } catch (Exception e) {
             e.printStackTrace();
         }
