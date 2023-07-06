@@ -3,20 +3,24 @@ package main.business_logic;
 import main.DomainModel.*;
 import main.orm.ArtworkDAO;
 import main.orm.ItineraryDAO;
+import main.orm.VisitDAO;
 import main.orm.VisitorDAO;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
+import org.junit.platform.reporting.shadow.org.opentest4j.reporting.events.core.Data;
 
 
 public class Curator {
@@ -74,7 +78,7 @@ public class Curator {
             messageBodyPart.setContent(htmlText, "text/html");
             multipart.addBodyPart(messageBodyPart);
             messageBodyPart = new MimeBodyPart();
-            DataSource fds = new FileDataSource("imgs/logo.png");
+            DataSource fds = new FileDataSource("C:\\Users\\micha\\VS_Projects\\ElaboratoSWE\\main\\business_logic\\imgs\\logo.png");
             messageBodyPart.setDataHandler(new DataHandler(fds));
             messageBodyPart.setHeader("Content-ID", "<image>");
             multipart.addBodyPart(messageBodyPart);
