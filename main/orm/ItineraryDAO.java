@@ -43,8 +43,11 @@ public class ItineraryDAO {
 
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "SELECT id, itinerary.name as i_name, code, artwork.name as a_name, artist as author, status, payload FROM (Itinerary left join Artwork_Itinerary on id=itinerary) left join Artwork on artwork = code WHERE id = ?";
-        PreparedStatement ps = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        String sql = """
+                SELECT id, itinerary.name as i_name, code, artwork.name as a_name, artist as author, status, payload
+                FROM (Itinerary left join Artwork_Itinerary on id=itinerary) left join Artwork on artwork = code
+                WHERE id = ?""";
+        PreparedStatement ps = con.prepareStatement(sql, ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
 
@@ -88,5 +91,15 @@ public class ItineraryDAO {
 
         ps.executeUpdate();
         ps.close();
+    }
+
+    public boolean inUse(Itinerary i) throws SQLException {
+        Connection con = ConnectionManager.getConnection();
+
+        String sql = "SELECT visit FROM visit_itinerary WHERE itinerary = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, i.getId());
+        ResultSet rs = ps.executeQuery();
+        return rs.next();  //returns true if query has at least a tuple
     }
 }

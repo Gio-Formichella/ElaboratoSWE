@@ -3,15 +3,18 @@ package test.daos;
 import main.DomainModel.Artwork;
 import main.DomainModel.Itinerary;
 import main.DomainModel.OnDisplay;
+import main.DomainModel.Visit;
 import main.orm.ArtworkDAO;
 import main.orm.ConnectionManager;
 import main.orm.ItineraryDAO;
+import main.orm.VisitDAO;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,6 +98,76 @@ public class ItineraryDAOTest {
             try {
                 idao.delete(i);
                 adao.delete(a);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    void getTransitive() {
+        ArrayList<Artwork> artworks = new ArrayList<>();
+        Artwork a1 = new Artwork(-1, "TestArtwork1", "TestAuthor1", new OnDisplay());
+        Artwork a2 = new Artwork(-2, "TestArtwork2", "TestAuthor2", new OnDisplay());
+        artworks.add(a1);
+        artworks.add(a2);
+        Itinerary i = new Itinerary(-1, "TestItinerary", artworks);
+        try {
+            //set up
+            ArtworkDAO adao = new ArtworkDAO();
+            adao.insert(a1);
+            adao.insert(a2);
+            ItineraryDAO idao = new ItineraryDAO();
+            idao.insert(i);
+            idao.addArtworkToItinerary(i, a1);
+            idao.addArtworkToItinerary(i, a2);
+
+            //test
+            Itinerary retrieved = idao.getTransitive(i.getId());
+            assertEquals(i.getId(), retrieved.getId());
+            assertEquals(i.getName(), retrieved.getName());
+            assertEquals(i.getArtworks().size(), retrieved.getArtworks().size());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                //tear down
+                ItineraryDAO idao = new ItineraryDAO();
+                idao.delete(i);
+                ArtworkDAO adao = new ArtworkDAO();
+                adao.delete(a1);
+                adao.delete(a2);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    void inUse() {
+        Itinerary i1 = new Itinerary(-1, "inUse", new ArrayList<>());
+        Itinerary i2 = new Itinerary(-2, "NotInUse", new ArrayList<>());
+
+        VisitDAO vdao = new VisitDAO();
+        ArrayList<Itinerary> itineraries = new ArrayList<>();
+        itineraries.add(i1);
+        Visit v = new Visit(-1, "2020-12-12", "12:00:00", 0, 0, itineraries);
+
+        ItineraryDAO idao = new ItineraryDAO();
+        try {
+            idao.insert(i2);
+            idao.insert(i1);
+            vdao.insert(v);
+
+            assertTrue(idao.inUse(i1));
+            assertFalse(idao.inUse(i2));
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                vdao.delete(v.getCode());
+                idao.delete(i1);
+                idao.delete(i2);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
