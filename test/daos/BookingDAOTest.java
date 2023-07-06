@@ -1,10 +1,7 @@
 package test.daos;
 
 import main.DomainModel.*;
-import main.orm.ArtworkDAO;
-import main.orm.BookingDAO;
-import main.orm.ConnectionManager;
-import main.orm.VisitorDAO;
+import main.orm.*;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -21,16 +18,22 @@ public class BookingDAOTest {
     public void delete() throws SQLException {
         BookingDAO dao = new BookingDAO();
         VisitorDAO vdao = new VisitorDAO();
+        ItineraryDAO idao = new ItineraryDAO();
+        VisitDAO vidao = new VisitDAO();
+        ArtworkDAO adao = new ArtworkDAO();
         ArrayList<Artwork> artworks = new ArrayList<>();
-        Artwork art = new Artwork(5, "La passeggiata", "Monet", new OnDisplay());
+        Artwork art = new Artwork(5, "Gioconda", "Leonardo da Vinci", new OnDisplay());
         artworks.add(art);
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(485, "2020-01-01", "10:23:45", 120, 200, itineraries);
+        Visit visit = new Visit(798, "2021-11-25", "12:54:32", 300, 100, itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 128;
         try {
+            adao.insert(art);
+            idao.insert(it);
+            vidao.insert(visit);
             vdao.insert(visitor);
             dao.addBooking(visit, visitor, b_code, 5);
             dao.delete(b_code);
@@ -39,6 +42,9 @@ public class BookingDAOTest {
             e.printStackTrace();
         } finally {
             vdao.delete(visitor.getEmailAddress());
+            vidao.delete(visit.getCode());
+            idao.delete(it);
+            adao.delete(art);
         }
     }
 
