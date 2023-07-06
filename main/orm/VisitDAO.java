@@ -31,7 +31,6 @@ public class VisitDAO {
         }else{
             return null;
         }
-
         return v;
     }
 
@@ -76,7 +75,7 @@ public class VisitDAO {
         ps.executeUpdate();
         ps.close();
 
-        sql = "DELETE FROM visit_booking WHERE visit = ?";
+        sql = "DELETE FROM booking WHERE visit = ?";
         ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ps.executeUpdate();
@@ -137,7 +136,7 @@ public class VisitDAO {
     public ArrayList<Visit> getAll() throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "SELECT code FROM Visit GROUP BY code";
+        String sql = "SELECT code FROM Visit";
         PreparedStatement ps = con.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
@@ -146,35 +145,7 @@ public class VisitDAO {
             Visit v = getTransitive(rs.getInt("code"));
             visits.add(v);
         }
-        return visits;
-    }
-
-    public void removeItineraryFromVisits(int id)throws SQLException{
-        Connection con = ConnectionManager.getConnection();
-
-        String sql = "DELETE FROM Visit WHERE itinerary = ?";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, id);
-        ps.executeUpdate();
         ps.close();
-    }
-
-
-
-    public int getBookedTickets(Visit v) throws SQLException {
-        Connection con = ConnectionManager.getConnection();
-        String sql = "SELECT SUM(number_of_tickets) as total_tickets FROM Booking as B WHERE B.visit = ? GROUP BY B.visit";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, v.getCode());
-        ResultSet rs = ps.executeQuery();
-        int total_tickets;
-
-        if (rs.next()) {
-            total_tickets = rs.getInt("total_tickets");
-        } else {
-            total_tickets = 0;
-        }
-
-        return total_tickets;
+        return visits;
     }
 }
