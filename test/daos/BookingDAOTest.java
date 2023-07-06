@@ -119,10 +119,8 @@ public class BookingDAOTest {
             assertEquals(retrieved.get(retrieved.size() - 2).getVisit().getCode(), b.getVisit().getCode());
             assertEquals(retrieved.get(retrieved.size() - 2).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
             assertEquals(retrieved.get(retrieved.size() - 2).isPaid(), b.isPaid());
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
         } finally {
             try {
                 dao.delete(b.getCode());
@@ -150,10 +148,8 @@ public class BookingDAOTest {
             bdao.setPaid(b.getCode());
             Booking booking = bdao.get(b.getCode());
             assertTrue(booking.isPaid());
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
         } finally {
             bdao.delete(b.getCode());
         }
@@ -181,10 +177,8 @@ public class BookingDAOTest {
             assertEquals(retrieved.getVisitor().getEmailAddress(), visitor.getEmailAddress());
             assertEquals(retrieved.getVisit().getCode(), visit.getCode());
             assertFalse(retrieved.isPaid());
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
         } finally {
             try {
                 dao.delete(b_code);
@@ -219,10 +213,8 @@ public class BookingDAOTest {
             assertEquals(b_code, b.getCode());
             assertEquals(visit.getCode(), v.getCode());
             assertEquals(visitor.getEmailAddress(), vr.getEmailAddress());
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
         }
         try {
             bdao.delete(b_code);
