@@ -46,10 +46,14 @@ public class VisitorTest {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            vdao.delete(visitor.getEmailAddress());
-            vidao.delete(visit.getCode());
-            idao.delete(it);
-            adao.delete(art);
+            try {
+                vdao.delete(visitor.getEmailAddress());
+                vidao.delete(visit.getCode());
+                idao.delete(it);
+                adao.delete(art);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -67,7 +71,11 @@ public class VisitorTest {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            vdao.delete(visitor.getEmailAddress());
+            try {
+                vdao.delete(visitor.getEmailAddress());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -86,7 +94,11 @@ public class VisitorTest {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            vdao.delete(visitor.getEmailAddress());
+            try {
+                vdao.delete(visitor.getEmailAddress());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -118,11 +130,15 @@ public class VisitorTest {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            vc.cancelBooking(b_code);
-            vdao.delete(visitor.getEmailAddress());
-            vidao.delete(visit.getCode());
-            idao.delete(it);
-            adao.delete(art);
+            try {
+                vc.cancelBooking(b_code);
+                vdao.delete(visitor.getEmailAddress());
+                vidao.delete(visit.getCode());
+                idao.delete(it);
+                adao.delete(art);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -156,11 +172,15 @@ public class VisitorTest {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            vc.cancelBooking(b.getCode());
-            vdao.delete(visitor.getEmailAddress());
-            vidao.delete(visit.getCode());
-            idao.delete(it);
-            adao.delete(art);
+            try {
+                vc.cancelBooking(b.getCode());
+                vdao.delete(visitor.getEmailAddress());
+                vidao.delete(visit.getCode());
+                idao.delete(it);
+                adao.delete(art);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -197,11 +217,15 @@ public class VisitorTest {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            vc.cancelBooking(b.getCode());
-            vdao.delete(visitor.getEmailAddress());
-            vidao.delete(visit.getCode());
-            idao.delete(it);
-            adao.delete(art);
+            try {
+                vc.cancelBooking(b.getCode());
+                vdao.delete(visitor.getEmailAddress());
+                vidao.delete(visit.getCode());
+                idao.delete(it);
+                adao.delete(art);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -244,11 +268,15 @@ public class VisitorTest {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            vc.cancelBooking(b.getCode());
-            vdao.delete(visitor.getEmailAddress());
-            vidao.delete(visit.getCode());
-            idao.delete(it);
-            adao.delete(art);
+            try {
+                vc.cancelBooking(b.getCode());
+                vdao.delete(visitor.getEmailAddress());
+                vidao.delete(visit.getCode());
+                idao.delete(it);
+                adao.delete(art);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -262,13 +290,17 @@ public class VisitorTest {
         try {
             adao.insert(a);
             artworks = vc.viewArtworks();
-            assertEquals(a.getCode(), artworks.get(artworks.size()-1).getCode());
-            assertEquals(a.getName(), artworks.get(artworks.size()-1).getName());
-            assertEquals(a.getAuthor(), artworks.get(artworks.size()-1).getAuthor());
-        } catch (Exception e){
+            assertEquals(a.getCode(), artworks.get(artworks.size() - 1).getCode());
+            assertEquals(a.getName(), artworks.get(artworks.size() - 1).getName());
+            assertEquals(a.getAuthor(), artworks.get(artworks.size() - 1).getAuthor());
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            adao.delete(a);
+            try {
+                adao.delete(a);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

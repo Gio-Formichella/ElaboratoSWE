@@ -41,10 +41,14 @@ public class BookingDAOTest {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            vdao.delete(visitor.getEmailAddress());
-            vidao.delete(visit.getCode());
-            idao.delete(it);
-            adao.delete(art);
+            try {
+                vdao.delete(visitor.getEmailAddress());
+                vidao.delete(visit.getCode());
+                idao.delete(it);
+                adao.delete(art);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -119,11 +123,15 @@ public class BookingDAOTest {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            bdao.delete(b_code);
-            vdao.delete(visitor.getEmailAddress());
-            vidao.delete(visit.getCode());
-            idao.delete(it);
-            adao.delete(art);
+            try {
+                bdao.delete(b_code);
+                vdao.delete(visitor.getEmailAddress());
+                vidao.delete(visit.getCode());
+                idao.delete(it);
+                adao.delete(art);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -207,15 +215,16 @@ public class BookingDAOTest {
             assertEquals(visitor.getEmailAddress(), vr.getEmailAddress());
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        try {
-            bdao.delete(b_code);
-            vdao.delete(visitor.getEmailAddress());
-            vidao.delete(visit.getCode());
-            idao.delete(it);
-            adao.delete(art);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } finally {
+            try {
+                bdao.delete(b_code);
+                vdao.delete(visitor.getEmailAddress());
+                vidao.delete(visit.getCode());
+                idao.delete(it);
+                adao.delete(art);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
