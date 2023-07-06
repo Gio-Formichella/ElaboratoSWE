@@ -72,4 +72,9 @@ public class VisitorController {
             bdao.setPaid(code);
         }
     }
+
+    public ArrayList<Visit> viewVisits() throws SQLException, ParseException{
+        VisitDAO dao = new VisitDAO();
+        return dao.getAll();
+    }
 }
