@@ -139,7 +139,7 @@ public class VisitorTest {
     }
 
     @Test
-    public void viewBookings() throws SQLException, ParseException {        //TODO aggiungere l'inserimento del Visitor
+    public void viewBookings() throws SQLException, ParseException {
         VisitorController vc = new VisitorController();
 
         VisitorDAO vdao = new VisitorDAO();
