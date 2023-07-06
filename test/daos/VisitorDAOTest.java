@@ -61,7 +61,11 @@ class VisitorDAOTest {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            vdao.cancelSubscriber(visitorFalse);
+            try {
+                vdao.cancelSubscriber(visitorFalse);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
     @Test
