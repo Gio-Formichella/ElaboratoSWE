@@ -24,7 +24,7 @@ public class BookingDAO {
 
     public ArrayList<Booking> getVisitorBookings(Visitor v) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
-        String sql = "SELECT DISTINCT B.code as booking, B.paid, B.visit as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visitor as VR, Booking as B  WHERE VR.email = B.visitor  AND B.visitor = ?";
+        String sql = "SELECT B.code as booking, B.paid, B.visit as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visitor as VR, Booking as B  WHERE VR.email = B.visitor  AND B.visitor = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setString(1, v.getEmailAddress());
         ResultSet rs = ps.executeQuery();
@@ -50,7 +50,7 @@ public class BookingDAO {
 
     public Booking get(int code) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
-        String sql = "SELECT DISTINCT B.paid as paid, B.visit as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visitor as VR, Booking as B WHERE B.visitor = VR.email AND B.code = ?";
+        String sql = "SELECT B.paid as paid, B.visit as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visitor as VR, Booking as B WHERE B.visitor = VR.email AND B.code = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ResultSet rs = ps.executeQuery();
@@ -75,7 +75,7 @@ public class BookingDAO {
 
     public ArrayList<Object> getBookingVisit(int code) throws SQLException, ParseException {
         Connection con = ConnectionManager.getConnection();
-        String sql = "SELECT DISTINCT B.paid as paid, B.visit as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visitor as VR, Booking as B WHERE B.visitor = VR.email AND B.code = ?";
+        String sql = "SELECT B.paid as paid, B.visit as visit, VR.email as email, VR.name as name, VR.surname as surname, VR.newsletter as newsletter, B.number_of_tickets as number_of_tickets FROM Visitor as VR, Booking as B WHERE B.visitor = VR.email AND B.code = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ResultSet rs = ps.executeQuery();
