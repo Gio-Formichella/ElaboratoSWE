@@ -33,10 +33,9 @@ public class BookingOffice {
     public void cancelVisit(int code) throws SQLException, MessagingException, ParseException{
         VisitDAO dao = new VisitDAO();
         Visit v = dao.getTransitive(code);//serve per il messaggio di notifica
-        dao.delete(code);
         VisitorDAO vdao = new VisitorDAO();
         ArrayList<Visitor> toBeNotifiedVisitors = vdao.getToBeNotifiedVisitors(v);
-
+        dao.delete(code);
         //invio email
         if (toBeNotifiedVisitors.size()>0){
             Properties properties = new Properties();
@@ -71,6 +70,12 @@ public class BookingOffice {
 
     public void modifyVisit(Visit v) throws SQLException, MessagingException, ParseException{
         VisitDAO dao = new VisitDAO();
+        Visit vOld=dao.getTransitive(v.getCode());
+        String oldItinerariesMessage = "";
+        for(Itinerary i:v.getItineraries()){
+                oldItinerariesMessage += i.getName() + " ";
+            }
+        String oldVisitMessage="La visita del giorno "+vOld.getDate() +" dalle " + vOld.getTime() + " per gli itinerari\n"+ oldItinerariesMessage;
         dao.update(v);
         VisitorDAO vdao = new VisitorDAO();
         ArrayList<Visitor> toBeNotifiedVisitors = vdao.getToBeNotifiedVisitors(v);
@@ -96,8 +101,8 @@ public class BookingOffice {
                 itinerariesMessage += i.getName() + " ";
             }
             message.setFrom(new InternetAddress(emailAddress));
-            message.setSubject("Visita cancellata");
-            message.setText("La visita del giorno "+v.getDate() +" dalle " + v.getTime() + " per gli itinerari\n" + itinerariesMessage + "\n è stata cancellata");
+            message.setSubject("Visita modificata");
+            message.setText(oldVisitMessage+" ha subito una modifica. La visita ora si svolgerà il giorno "+v.getDate() +" dalle " + v.getTime() + " per gli itinerari\n" + itinerariesMessage);
 
             for(Visitor subscriber : toBeNotifiedVisitors){
                 Address addressTo = new InternetAddress(subscriber.getEmailAddress());

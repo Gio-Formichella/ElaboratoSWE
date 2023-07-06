@@ -1,7 +1,6 @@
 package test.daos;
 
 import main.DomainModel.*;
-import main.orm.ArtworkDAO;
 import main.orm.BookingDAO;
 import main.orm.ConnectionManager;
 import org.junit.Test;
