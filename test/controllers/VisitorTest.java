@@ -36,10 +36,8 @@ public class VisitorTest {
             v.bookVisit(visit, visitor, b.getCode(), 4);
             v.cancelBooking(b.getCode());
             assertNull(bdao.get(b.getCode()));
-        } catch (SQLException e) {
-            e.printStackTrace();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 
