@@ -38,12 +38,10 @@ public class VisitDAOTest {
             assertEquals(retrieved.getTime(), v.getTime());
             assertEquals(retrieved.getMaxVisitors(), v.getMaxVisitors());
             assertEquals(retrieved.getPrice(), v.getPrice());
-            assertTrue(v.getItineraries().size() == retrieved.getItineraries().size());
-        }catch(SQLException e){
+            assertEquals(v.getItineraries().size(), retrieved.getItineraries().size());
+        }catch(SQLException | ParseException e){
             e.printStackTrace();
-        }catch(ParseException e){
-            e.printStackTrace();
-        }finally{ //removing inserted tuple
+        } finally{ //removing inserted tuple
             try{
                 dao.delete(v.getCode());
                 iDao.delete(i);
@@ -66,11 +64,9 @@ public class VisitDAOTest {
             dao.insert(v);
             dao.delete(v.getCode());
             assertNull(dao.getTransitive(v.getCode()));
-        }catch(SQLException e){
+        }catch(SQLException | ParseException e){
             e.printStackTrace();
-        }catch(ParseException e){
-            e.printStackTrace();
-        }finally{
+        } finally{
             try{  //if something went wrong with delete method, manual deletion of inserted tuple
                 Connection con = ConnectionManager.getConnection();
                 String sql1 = "DELETE FROM Visit WHERE code = ?";
@@ -111,11 +107,9 @@ public class VisitDAOTest {
             assertEquals(retrieved.getPrice(), v2.getPrice());
             dao.delete(v2.getCode());
             assertNull(dao.getTransitive(v2.getCode()));
-        }catch(SQLException e){
+        }catch(SQLException | ParseException e){
             e.printStackTrace();
-        }catch(ParseException e){
-            e.printStackTrace();
-        }finally{
+        } finally{
             try{
                 iDao.delete(i1);
                 iDao.delete(i2);
@@ -146,12 +140,10 @@ public class VisitDAOTest {
             assertEquals(retrieved.getTime(), v.getTime());
             assertEquals(retrieved.getMaxVisitors(), v.getMaxVisitors());
             assertEquals(retrieved.getPrice(), v.getPrice());
-            assertTrue(v.getItineraries().size() == retrieved.getItineraries().size());
-        }catch(SQLException e){
+            assertEquals(v.getItineraries().size(), retrieved.getItineraries().size());
+        }catch(SQLException | ParseException e){
             e.printStackTrace();
-        }catch(ParseException e){
-            e.printStackTrace();
-        }finally{
+        } finally{
             try{
                 vDao.delete(v.getCode());
                 iDao.delete(i1);
@@ -161,42 +153,4 @@ public class VisitDAOTest {
             }
         }
     }
-
-    /*@Test
-    void removeItineraryFromVisits(){
-        VisitDAO vDao = new VisitDAO();
-        ItineraryDAO iDao = new ItineraryDAO();
-        Itinerary i1=new Itinerary(1, "itinerary1", null);
-        Itinerary i2=new Itinerary(2, "itinerary2", null);
-        ArrayList<Itinerary> itineraries = new ArrayList<>();
-        itineraries.add(i1);
-        itineraries.add(i2);
-        Visit v = new Visit(2, "2020-12-12", "12:00:00", 100, 10.0f, itineraries);
-        try{
-            iDao.insert(i1);
-            iDao.insert(i2);
-            vDao.insert(v);
-            vDao.removeItineraryFromVisits(i1.getId());
-            Visit retrieved = vDao.getTransitive(v.getCode());
-            assertEquals(retrieved.getCode(), v.getCode());
-            assertEquals(retrieved.getDate(), v.getDate());
-            assertEquals(retrieved.getTime(), v.getTime());
-            assertEquals(retrieved.getMaxVisitors(), v.getMaxVisitors());
-            assertEquals(retrieved.getPrice(), v.getPrice());
-            assertTrue(v.getItineraries().size() > retrieved.getItineraries().size());
-            assertFalse(retrieved.getItineraries().contains(i2));
-        }catch(SQLException e){
-            e.printStackTrace();
-        }catch(ParseException e){
-            e.printStackTrace();
-        }finally{
-            try{
-                vDao.delete(v.getCode());
-                iDao.delete(i1);
-                iDao.delete(i2);
-            }catch(SQLException e){
-                e.printStackTrace();
-            }
-        }
-    }*/
 }

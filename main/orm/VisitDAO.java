@@ -147,4 +147,21 @@ public class VisitDAO {
         ps.close();
         return visits;
     }
+
+    public int getBookedTickets(Visit v) throws SQLException {
+        Connection con = ConnectionManager.getConnection();
+        String sql = "SELECT SUM(number_of_tickets) as total_tickets FROM Booking as B WHERE B.visit = ? GROUP BY B.visit";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, v.getCode());
+        ResultSet rs = ps.executeQuery();
+        int total_tickets;
+
+        if (rs.next()) {
+            total_tickets = rs.getInt("total_tickets");
+        } else {
+            total_tickets = 0;
+        }
+
+        return total_tickets;
+    }
 }
