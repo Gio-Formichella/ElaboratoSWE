@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class VisitorTest {
     @Test
-    public void cancelBooking() throws SQLException {
+    public void cancelBooking() {
         VisitorController v = new VisitorController();
 
         BookingDAO bdao = new BookingDAO();
@@ -58,7 +58,7 @@ public class VisitorTest {
     }
 
     @Test
-    public void subscribeToNewsletter() throws SQLException {
+    public void subscribeToNewsletter(){
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         VisitorController vc = new VisitorController();
         VisitorDAO vdao = new VisitorDAO();
@@ -80,7 +80,7 @@ public class VisitorTest {
     }
 
     @Test
-    public void unsubscribeFromNewsletter() throws SQLException {
+    public void unsubscribeFromNewsletter() {
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         VisitorController vc = new VisitorController();
         VisitorDAO vdao = new VisitorDAO();
@@ -103,7 +103,7 @@ public class VisitorTest {
     }
 
     @Test
-    public void bookVisit() throws SQLException, ParseException {
+    public void bookVisit() {
         VisitorController vc = new VisitorController();
         BookingDAO bdao = new BookingDAO();
         VisitorDAO vdao = new VisitorDAO();
@@ -143,7 +143,7 @@ public class VisitorTest {
     }
 
     @Test
-    public void payFee() throws SQLException, ParseException {
+    public void payFee() {
         VisitorController vc = new VisitorController();
 
         BookingDAO bdao = new BookingDAO();
@@ -185,7 +185,7 @@ public class VisitorTest {
     }
 
     @Test
-    public void viewBookings() throws SQLException, ParseException {
+    public void viewBookings() {
         VisitorController vc = new VisitorController();
 
         VisitorDAO vdao = new VisitorDAO();
@@ -230,7 +230,7 @@ public class VisitorTest {
     }
 
     @Test
-    public void getBookedTicketInfo() throws SQLException, ParseException {
+    public void getBookedTicketInfo() {
         VisitorController vc = new VisitorController();
 
         VisitorDAO vdao = new VisitorDAO();
@@ -281,7 +281,7 @@ public class VisitorTest {
     }
 
     @Test
-    public void viewArtworks() throws SQLException {
+    public void viewArtworks() {
         VisitorController vc = new VisitorController();
 
         ArtworkDAO adao = new ArtworkDAO();
