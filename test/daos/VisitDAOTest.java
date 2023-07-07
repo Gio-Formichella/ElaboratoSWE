@@ -25,7 +25,7 @@ public class VisitDAOTest {
 
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         itineraries.add(i);
-        Visit v = new Visit(89, "2020-12-12", "12:00:00", 100, 10.0f, itineraries);
+        Visit v = new Visit(89, "2020-12-12", "12:00:00", 100, 10.0f, "Italiano", itineraries);
         VisitDAO dao = new VisitDAO();
         try{
             iDao.insert(i);
@@ -54,7 +54,7 @@ public class VisitDAOTest {
     @Test
     void delete(){
         VisitDAO dao = new VisitDAO();
-        Visit v = new Visit(2, "2020-12-12", "12:00:00", 100, 10.0f, new ArrayList<>());
+        Visit v = new Visit(2, "2020-12-12", "12:00:00", 100, 10.0f, "Italiano", new ArrayList<>());
         Itinerary i = new Itinerary(2, "Egitto", new ArrayList<>());
         v.addItinerary(i);
         ItineraryDAO iDao = new ItineraryDAO();
@@ -86,7 +86,7 @@ public class VisitDAOTest {
     @Test
     void update(){
         VisitDAO dao = new VisitDAO();
-        Visit v = new Visit(2, "2020-12-12", "12:00:00", 100, 10.0f, new ArrayList<>());
+        Visit v = new Visit(2, "2020-12-12", "12:00:00", 100, 10.0f, "Italiano", new ArrayList<>());
         Itinerary i1 = new Itinerary(2, "Egitto", new ArrayList<>());
         Itinerary i2 = new Itinerary(3, "Egitto", new ArrayList<>());
         v.addItinerary(i1);
@@ -98,13 +98,14 @@ public class VisitDAOTest {
             dao.insert(v);
             ArrayList<Itinerary> newItineraries = new ArrayList<>();
             newItineraries.add(i1);
-            Visit v2=new Visit(2, "2020-12-15", "15:00:00", 200, 20.0f, newItineraries); 
+            Visit v2=new Visit(2, "2020-12-15", "15:00:00", 200, 20.0f, "Inglese", newItineraries);
             dao.update(v2);
             Visit retrieved = dao.getTransitive(v.getCode());
             assertEquals(retrieved.getDate(), v2.getDate());
             assertEquals(retrieved.getTime(), v2.getTime());
             assertEquals(retrieved.getMaxVisitors(), v2.getMaxVisitors());
             assertEquals(retrieved.getPrice(), v2.getPrice());
+            assertEquals(retrieved.getLanguage(), v2.getLanguage());
             dao.delete(v2.getCode());
             assertNull(dao.getTransitive(v2.getCode()));
         }catch(SQLException | ParseException e){
@@ -128,7 +129,7 @@ public class VisitDAOTest {
         Itinerary i2=new Itinerary(2, "itinerary2", null);
         itineraries.add(i1);
         itineraries.add(i2);
-        Visit v = new Visit(2, "2020-12-12", "12:00:00", 100, 10.0f, itineraries);
+        Visit v = new Visit(2, "2020-12-12", "12:00:00", 100, 10.0f, "Italiano", itineraries);
         ItineraryDAO iDao = new ItineraryDAO();
         try{
             iDao.insert(i1);
@@ -140,6 +141,7 @@ public class VisitDAOTest {
             assertEquals(retrieved.getTime(), v.getTime());
             assertEquals(retrieved.getMaxVisitors(), v.getMaxVisitors());
             assertEquals(retrieved.getPrice(), v.getPrice());
+            assertEquals(retrieved.getLanguage(), v.getLanguage());
             assertEquals(v.getItineraries().size(), retrieved.getItineraries().size());
         }catch(SQLException | ParseException e){
             e.printStackTrace();

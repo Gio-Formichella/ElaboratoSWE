@@ -27,7 +27,7 @@ public class BookingDAOTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, "Italiano", itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 128;
         try {
@@ -65,7 +65,7 @@ public class BookingDAOTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, "Italiano", itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 121;
         try {
@@ -107,7 +107,7 @@ public class BookingDAOTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, "Italiano", itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 177;
 
@@ -148,7 +148,7 @@ public class BookingDAOTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, "Italiano", itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 190;
         Booking retrieved;
@@ -193,7 +193,7 @@ public class BookingDAOTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, "Italiano", itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 165;
         ArrayList<Object> info_booking;

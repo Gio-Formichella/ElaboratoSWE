@@ -31,7 +31,7 @@ public class VisitorTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, "Italiano", itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         Booking b = new Booking(194, false, visit, visitor, 5);
 
@@ -116,7 +116,7 @@ public class VisitorTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, "Italiano", itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         int b_code = 170;
 
@@ -157,7 +157,7 @@ public class VisitorTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, "Italiano", itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         Booking b = new Booking(191, false, visit, visitor, 5);
 
@@ -198,7 +198,7 @@ public class VisitorTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, "Italiano", itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
 
         Booking b = new Booking(151, false, visit, visitor, 5);
@@ -243,7 +243,7 @@ public class VisitorTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary it = new Itinerary(90, "Egitto", artworks);
         itineraries.add(it);
-        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, itineraries);
+        Visit visit = new Visit(532, "2021-11-25", "12:54:32", 300, 100, "Italiano", itineraries);
         Visitor visitor = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
         Booking b = new Booking(181, false, visit, visitor, 5);
         ArrayList<Object> info_booking;

@@ -21,12 +21,12 @@ public class BookingOffice {
     private final String emailAddress = "museoswe@gmail.com";
     private final String emailPassword = "usomdxtqjcwbdiid";
 
-    public void setVisit(int code, String date, String time, int maxVisitors, float price, ArrayList<Itinerary> itineraries) throws SQLException, ParseException{
+    public void setVisit(int code, String date, String time, int maxVisitors, float price, String language, ArrayList<Itinerary> itineraries) throws SQLException, ParseException{
         if(maxVisitors<0 || price<0){
             throw new SQLException("maxVisitors and price must be positive");
         }
         VisitDAO dao = new VisitDAO();
-        Visit v = new Visit(code, date, time, maxVisitors, price, itineraries);
+        Visit v = new Visit(code, date, time, maxVisitors, price, language, itineraries);
         dao.insert(v);
     }
 
