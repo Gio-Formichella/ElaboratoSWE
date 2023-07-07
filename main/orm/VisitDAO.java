@@ -128,8 +128,8 @@ public class VisitDAO {
         ps.setTime(2, java.sql.Time.valueOf(localTime));
         ps.setInt(3, v.getMaxVisitors());
         ps.setFloat(4, v.getPrice());
-        ps.setInt(5, v.getCode());
-        ps.setString(6, v.getLanguage());
+        ps.setString(5, v.getLanguage());
+        ps.setInt(6, v.getCode());
         ps.executeUpdate();
         ps.close();
     }
