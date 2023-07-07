@@ -45,7 +45,7 @@ public class Curator {
         //invio email
         if (nlsubscribers.size() > 0) {
             String messageToSend = "New artwork " + a.getName() + " of the author " + a.getAuthor() + " is now " + a.getStatus() + " in the " + i.getName() + " itinerary";
-            sendEmail(nlsubscribers, messageToSend);
+            sendEmail(nlsubscribers, "New artwork", messageToSend);
         }
     }
 
@@ -68,7 +68,7 @@ public class Curator {
                 //emailing ai visitatori
                 if (visitors.size() > 0) {
                     String messageToSend = "The artwork " + a.getName() + " of the author " + a.getAuthor() + " is now " + a.getStatus();
-                    sendEmail(visitors, messageToSend);
+                    sendEmail(visitors, "Change of artwork status", messageToSend);
                 }
             } else if (as.getClass() == OnDisplay.class) {
                 //opera torna allo stato visibile
@@ -77,7 +77,7 @@ public class Curator {
                 //invio email
                 if (nlsubscribers.size() > 0) {
                     String messageToSend = "The artwork " + a.getName() + " of the author " + a.getAuthor() + " is now back on display !";
-                    sendEmail(nlsubscribers, messageToSend);
+                    sendEmail(nlsubscribers, "Change of artwork status", messageToSend);
                 }
             }
             a.setStatus(as);
@@ -94,7 +94,7 @@ public class Curator {
             throw new RuntimeException("Itinerary in use");
     }
 
-    private void sendEmail(ArrayList<Visitor> toBeNotified, String messageToSend) throws MessagingException {
+    private void sendEmail(ArrayList<Visitor> toBeNotified, String subject, String messageToSend) throws MessagingException {
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");  //autenticazione user
         properties.put("mail.smtp.host", "smtp.gmail.com");  //server smtp gmail
@@ -110,12 +110,12 @@ public class Curator {
 
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(emailAddress));
-        message.setSubject("Nuova opera");
+        message.setSubject(subject);
         for (Visitor v : toBeNotified) {
             Address addressTo = new InternetAddress(v.getEmailAddress());
             message.addRecipient(Message.RecipientType.TO, addressTo);
         }
-        message.setSubject("Nuova opera");
+        message.setSubject(subject);
 
         MimeMultipart multipart = new MimeMultipart("related");
 
