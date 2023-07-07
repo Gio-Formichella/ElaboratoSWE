@@ -8,14 +8,17 @@ public class Visit {
     private String time;
     private int maxVisitors;
     private float price;
+
+    private String language;
     private ArrayList<Itinerary> itineraries;
 
-    public Visit(int code, String date, String time, int maxVisitors, float price, ArrayList<Itinerary> itineraries) {
+    public Visit(int code, String date, String time, int maxVisitors, float price, String language, ArrayList<Itinerary> itineraries) {
         this.code = code;
         this.date = date;
         this.time = time;
         this.maxVisitors = maxVisitors;
         this.price = price;
+        this.language = language;
         this.itineraries = itineraries;
     }
 
@@ -37,6 +40,10 @@ public class Visit {
 
     public float getPrice() {
         return price;
+    }
+
+    public String getLanguage(){
+        return language;
     }
 
     public ArrayList<Itinerary> getItineraries() {

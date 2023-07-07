@@ -25,6 +25,7 @@ public class BookingOfficeTest {
         String time = "10:00:00";
         int maxVisitors = 100;
         float price = 10;
+        String language = "Italiano";
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary i = new Itinerary(1, "itinerary1", null);
         itineraries.add(i);
@@ -32,7 +33,7 @@ public class BookingOfficeTest {
         try {
             ItineraryDAO iDao = new ItineraryDAO();
             iDao.insert(i);
-            b.setVisit(code, date, time, maxVisitors, price, itineraries);
+            b.setVisit(code, date, time, maxVisitors, price, language, itineraries);
             VisitDAO vDao = new VisitDAO();
             Visit v = vDao.getTransitive(code);
             assertEquals(v.getCode(), code);
@@ -63,13 +64,14 @@ public class BookingOfficeTest {
         String time = "10:00:00";
         int maxVisitors = 100;
         float price = 10;
+        String language = "Italiano";
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary i = new Itinerary(1, "itinerary1", null);
         itineraries.add(i);
         try {
             ItineraryDAO iDao = new ItineraryDAO();
             iDao.insert(i);
-            b.setVisit(code, date, time, maxVisitors, price, itineraries);
+            b.setVisit(code, date, time, maxVisitors, price, language, itineraries);
             b.cancelVisit(code);
             VisitDAO dao = new VisitDAO();
             assertNull(dao.getTransitive(code));
@@ -94,6 +96,7 @@ public class BookingOfficeTest {
         String date = "2020-01-01";
         String time = "10:00:00";
         int maxVisitors = 100;
+        String language = "Italiano";
         float price = 10;
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary i = new Itinerary(1, "itinerary1", null);
@@ -101,19 +104,20 @@ public class BookingOfficeTest {
         try {
             ItineraryDAO iDao = new ItineraryDAO();
             iDao.insert(i);
-            b.setVisit(code, date, time, maxVisitors, price, itineraries);
+            b.setVisit(code, date, time, maxVisitors, price, language, itineraries);
             String date2 = "2020-01-31";
             String time2 = "11:00:00";
             int maxVisitors2 = 200;
-            float price2 = 20;
-            Visit v = new Visit(code, date2, time2, maxVisitors2, price2, itineraries);
+            String language2 = "Inglese";
+            Visit v = new Visit(code, date2, time2, maxVisitors2, price, language2, itineraries);
             b.modifyVisit(v);
             VisitDAO dao = new VisitDAO();
             Visit v2 = dao.getTransitive(code);
             assertEquals(v2.getDate(), date2);
             assertEquals(v2.getTime(), time2);
             assertEquals(v2.getMaxVisitors(), maxVisitors2);
-            assertEquals(v2.getPrice(), price2);
+            assertEquals(v2.getPrice(), price);
+            assertEquals(v2.getLanguage(), language2);
         } catch (SQLException | ParseException | MessagingException e) {
             e.printStackTrace();
         } finally{

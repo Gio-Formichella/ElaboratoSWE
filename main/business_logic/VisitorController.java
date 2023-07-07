@@ -45,11 +45,16 @@ public class VisitorController {
         VisitDAO vdao = new VisitDAO();
         BookingDAO bdao = new BookingDAO();
         int booked_tickets = vdao.getBookedTickets(v);
-        if (bdao.get(code) == null && v.getMaxVisitors() >= (booked_tickets + num_visitors)) {
-            bdao.addBooking(v, vr, code, num_visitors);
+        if(num_visitors > 0){
+            if (bdao.get(code) == null && v.getMaxVisitors() >= (booked_tickets + num_visitors)) {
+                bdao.addBooking(v, vr, code, num_visitors);
+            } else {
+                throw new Exception("Non ci sono posti liberi oppure la prenotazione è già esistente");
+            }
         } else {
-            throw new Exception("Non ci sono posti liberi oppure la prenotazione è già esistente");
+            throw new Exception("Il numero di visitatori non è corretto");
         }
+
     }
 
     public ArrayList<Object> getBookedTicketInfo(int code) throws SQLException, ParseException {
@@ -66,5 +71,10 @@ public class VisitorController {
         if (bdao.get(code) != null) {
             bdao.setPaid(code);
         }
+    }
+
+    public ArrayList<Visit> viewVisits() throws SQLException, ParseException{
+        VisitDAO dao = new VisitDAO();
+        return dao.getAll();
     }
 }

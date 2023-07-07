@@ -5,9 +5,13 @@ import main.orm.ArtworkDAO;
 import main.orm.ItineraryDAO;
 import main.orm.VisitorDAO;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -40,31 +44,11 @@ public class Curator {
 
         //invio email
         if (nlsubscribers.size() > 0) {
-            Properties properties = new Properties();
-            properties.put("mail.smtp.auth", "true");  //autenticazione user
-            properties.put("mail.smtp.host", "smtp.gmail.com");  //server smtp gmail
-            properties.put("mail.smtp.port", "587"); //numero di porta richiesto da gmail
-            properties.put("mail.smtp.starttls.enable", "true");
-
-            Session session = Session.getInstance(properties, new Authenticator() {
-                @Override
-                protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(emailAddress, emailPassword);
-                }
-            });
-
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(emailAddress));
-            message.setSubject("Nuova opera");
-            message.setText("Nuova opera " + a.getName() + " dell'autore " + a.getAuthor() + " con stato " + a.getStatus() + " presente nell'itinerario " + i.getName());
-
-            for (Visitor subscriber : nlsubscribers) {
-                Address addressTo = new InternetAddress(subscriber.getEmailAddress());
-                message.addRecipient(Message.RecipientType.TO, addressTo);
-            }
-            Transport.send(message);
+            String messageToSend = "New artwork " + a.getName() + " of the author " + a.getAuthor() + " is now " + a.getStatus() + " in the " + i.getName() + " itinerary";
+            sendEmail(nlsubscribers, "New artwork", messageToSend);
         }
     }
+
 
     public ArrayList<Artwork> viewArtworks() throws SQLException {
         ArtworkDAO adao = new ArtworkDAO();
@@ -83,29 +67,8 @@ public class Curator {
                 ArrayList<Visitor> visitors = dao.getToBeNotifiedVisitors(a);
                 //emailing ai visitatori
                 if (visitors.size() > 0) {
-                    Properties properties = new Properties();
-                    properties.put("mail.smtp.auth", "true");  //autenticazione user
-                    properties.put("mail.smtp.host", "smtp.gmail.com");  //server smtp gmail
-                    properties.put("mail.smtp.port", "587"); //numero di porta richiesto da gmail
-                    properties.put("mail.smtp.starttls.enable", "true");
-
-                    Session session = Session.getInstance(properties, new Authenticator() {
-                        @Override
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(emailAddress, emailPassword);
-                        }
-                    });
-
-                    Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress(emailAddress));
-                    message.setSubject(a.getName() + " non più visibile");
-                    message.setText("L'opera " + a.getName() + " dell'autore " + a.getAuthor() + " è " + a.getStatus());
-
-                    for (Visitor visitor : visitors) {
-                        Address addressTo = new InternetAddress(visitor.getEmailAddress());
-                        message.addRecipient(Message.RecipientType.TO, addressTo);
-                    }
-                    Transport.send(message);
+                    String messageToSend = "The artwork " + a.getName() + " of the author " + a.getAuthor() + " is now " + a.getStatus();
+                    sendEmail(visitors, "Change of artwork status", messageToSend);
                 }
             } else if (as.getClass() == OnDisplay.class) {
                 //opera torna allo stato visibile
@@ -113,29 +76,8 @@ public class Curator {
                 ArrayList<Visitor> nlsubscribers = dao.getNLSubscribers();
                 //invio email
                 if (nlsubscribers.size() > 0) {
-                    Properties properties = new Properties();
-                    properties.put("mail.smtp.auth", "true");  //autenticazione user
-                    properties.put("mail.smtp.host", "smtp.gmail.com");  //server smtp gmail
-                    properties.put("mail.smtp.port", "587"); //numero di porta richiesto da gmail
-                    properties.put("mail.smtp.starttls.enable", "true");
-
-                    Session session = Session.getInstance(properties, new Authenticator() {
-                        @Override
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(emailAddress, emailPassword);
-                        }
-                    });
-
-                    Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress(emailAddress));
-                    message.setSubject("Nuova opera");
-                    message.setText("L'opera " + a.getName() + " dell'autore " + a.getAuthor() + " è tornata allo stato visibile");
-
-                    for (Visitor subscriber : nlsubscribers) {
-                        Address addressTo = new InternetAddress(subscriber.getEmailAddress());
-                        message.addRecipient(Message.RecipientType.TO, addressTo);
-                    }
-                    Transport.send(message);
+                    String messageToSend = "The artwork " + a.getName() + " of the author " + a.getAuthor() + " is now back on display !";
+                    sendEmail(nlsubscribers, "Change of artwork status", messageToSend);
                 }
             }
             a.setStatus(as);
@@ -150,5 +92,55 @@ public class Curator {
             dao.delete(i);
         else
             throw new RuntimeException("Itinerary in use");
+    }
+
+    private void sendEmail(ArrayList<Visitor> toBeNotified, String subject, String messageToSend) throws MessagingException {
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");  //autenticazione user
+        properties.put("mail.smtp.host", "smtp.gmail.com");  //server smtp gmail
+        properties.put("mail.smtp.port", "587"); //numero di porta richiesto da gmail
+        properties.put("mail.smtp.starttls.enable", "true");
+
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(emailAddress, emailPassword);
+            }
+        });
+
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(emailAddress));
+        message.setSubject(subject);
+        for (Visitor v : toBeNotified) {
+            Address addressTo = new InternetAddress(v.getEmailAddress());
+            message.addRecipient(Message.RecipientType.TO, addressTo);
+        }
+        message.setSubject(subject);
+
+        MimeMultipart multipart = new MimeMultipart("related");
+
+        //first part of the message
+        BodyPart messageBodyPart = new MimeBodyPart();
+        String htmlText = "<img src=\"cid:image\" alt=\"Museo di SWE\" style=\"width: 300px; height: 100px; \">\r\n" + //
+                "<h5 style=\"color: gray; font-family: Arial,sans-serif\">" + messageToSend + "</h5>\r\n" + //
+                "<div style=\"margin-top: 5em\">\r\n" + //
+                "  <p style=\"color: gray; font-family: Arial,sans-serif; font-size: 0.7em\">Contatti:</p>\r\n" + //
+                "  <p style=\"color: gray; font-family: Arial,sans-serif; font-size: 0.7em\">Telefono: 1234567890</p>\r\n" + //
+                "  <p style=\"color: gray; font-family: Arial,sans-serif; font-size: 0.7em\">Email: museoswe@gmail.com</p>\r\n" + //
+                "</div>";
+        messageBodyPart.setContent(htmlText, "text/html");
+        multipart.addBodyPart(messageBodyPart);
+
+        //second part of the message
+        messageBodyPart = new MimeBodyPart();
+        FileDataSource fds = new FileDataSource("imgs/logo.png");
+        messageBodyPart.setDataHandler(new DataHandler(fds));
+        messageBodyPart.setHeader("Content-ID", "<image>");
+        messageBodyPart.setFileName("logo.png");
+        multipart.addBodyPart(messageBodyPart);
+
+        message.setContent(multipart);
+
+        Transport.send(message);
     }
 }

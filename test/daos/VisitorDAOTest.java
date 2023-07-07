@@ -1,14 +1,18 @@
 package test.daos;
 
-import main.DomainModel.Visitor;
+import main.DomainModel.*;
+import main.orm.BookingDAO;
+import main.orm.ConnectionManager;
 import main.orm.VisitorDAO;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class VisitorDAOTest {
 
@@ -57,7 +61,11 @@ class VisitorDAOTest {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            vdao.cancelSubscriber(visitorFalse);
+            try {
+                vdao.cancelSubscriber(visitorFalse);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
     @Test
@@ -71,6 +79,42 @@ class VisitorDAOTest {
             Visitor v = vdao.get(visitorFalse.getEmailAddress());
             assertEquals(v.isNLSubscriber(), visitorFalse2.isNLSubscriber());
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void insert() {
+        VisitorDAO vdao = new VisitorDAO();
+        Visitor v = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
+        Visitor visitor;
+        try {
+            vdao.insert(v);
+
+            visitor = vdao.get(v.getEmailAddress());
+            assertEquals(v.getEmailAddress(), visitor.getEmailAddress());
+            assertEquals(v.getName(), visitor.getName());
+            assertEquals(v.getSurname(), visitor.getSurname());
+            assertEquals(v.isNLSubscriber(), visitor.isNLSubscriber());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                vdao.delete(v.getEmailAddress());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    @Test
+    public void delete() {
+        VisitorDAO vdao = new VisitorDAO();
+        Visitor v = new Visitor("Mattia", "Baroncelli", "mattia.baroncelli@stud.unifi.it", false);
+
+        try {
+            vdao.insert(v);
+            vdao.delete(v.getEmailAddress());
+            assertNull(vdao.get(v.getEmailAddress()));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
