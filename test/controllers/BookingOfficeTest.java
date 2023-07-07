@@ -105,15 +105,14 @@ public class BookingOfficeTest {
             String date2 = "2020-01-31";
             String time2 = "11:00:00";
             int maxVisitors2 = 200;
-            float price2 = 20;
-            Visit v = new Visit(code, date2, time2, maxVisitors2, price2, itineraries);
+            Visit v = new Visit(code, date2, time2, maxVisitors2, price, itineraries);
             b.modifyVisit(v);
             VisitDAO dao = new VisitDAO();
             Visit v2 = dao.getTransitive(code);
             assertEquals(v2.getDate(), date2);
             assertEquals(v2.getTime(), time2);
             assertEquals(v2.getMaxVisitors(), maxVisitors2);
-            assertEquals(v2.getPrice(), price2);
+            assertEquals(v2.getPrice(), price);
         } catch (SQLException | ParseException | MessagingException e) {
             e.printStackTrace();
         } finally{
