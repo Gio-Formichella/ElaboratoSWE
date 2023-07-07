@@ -4,10 +4,7 @@ import main.DomainModel.*;
 import main.orm.*;
 import org.junit.Test;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,7 +92,7 @@ public class BookingDAOTest {
     }
 
     @Test
-    public void setPaid() throws SQLException {
+    public void setPaid() {
         BookingDAO bdao = new BookingDAO();
         VisitorDAO vdao = new VisitorDAO();
         ItineraryDAO idao = new ItineraryDAO();
