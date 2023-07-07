@@ -14,7 +14,7 @@ public class VisitDAO {
     public Visit getTransitive(int code) throws SQLException, ParseException { //also instantiates Itineraries
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "SELECT code, date_, time_, max_visitors, price, itinerary FROM Visit join visit_itinerary on visit=visit.code WHERE code = ?";
+        String sql = "SELECT code, date_, time_, max_visitors, price, language, itinerary FROM Visit join visit_itinerary on visit=visit.code WHERE code = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, code);
         ResultSet rs = ps.executeQuery();
@@ -22,7 +22,7 @@ public class VisitDAO {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         ItineraryDAO iDAO = new ItineraryDAO();
         if(rs.next()){
-            v = new Visit(rs.getInt("code"), rs.getDate("date_").toString(), rs.getString("time_"), rs.getInt("max_visitors"), rs.getFloat("price"), itineraries);
+            v = new Visit(rs.getInt("code"), rs.getDate("date_").toString(), rs.getString("time_"), rs.getInt("max_visitors"), rs.getFloat("price"), rs.getString("language"), itineraries);
             do {//uses ItineraryDAO to instantiate Itinerary objects
                 Itinerary i = iDAO.getTransitive(rs.getInt("itinerary"));
                 v.addItinerary(i);
@@ -39,7 +39,7 @@ public class VisitDAO {
 
         Connection con = ConnectionManager.getConnection();
 
-        String sql = "INSERT INTO Visit (code, date_, time_, max_visitors, price) VALUES ( ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Visit (code, date_, time_, max_visitors, price, language) VALUES ( ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = con.prepareStatement(sql);
         ArrayList<Itinerary> itineraries = v.getItineraries();
         if(itineraries.isEmpty()) {
@@ -53,6 +53,7 @@ public class VisitDAO {
             ps.setTime(3, java.sql.Time.valueOf(localTime));
             ps.setInt(4, v.getMaxVisitors());
             ps.setFloat(5, v.getPrice());
+            ps.setString(6, v.getLanguage());
             ps.executeUpdate();
             ps.close();
             ps=con.prepareStatement("INSERT INTO visit_itinerary (itinerary, visit) VALUES (?, ?)");
@@ -118,7 +119,7 @@ public class VisitDAO {
             newItineraries.remove(0);
         }
 
-        String sql = "UPDATE Visit SET date_ = ?, time_ = ?, max_visitors = ?, price = ? WHERE code = ?";
+        String sql = "UPDATE Visit SET date_ = ?, time_ = ?, max_visitors = ?, price = ?, language = ? WHERE code = ?";
         java.util.Date utilDate = format.parse(v.getDate());
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
         LocalTime localTime = LocalTime.parse(v.getTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
@@ -128,6 +129,7 @@ public class VisitDAO {
         ps.setInt(3, v.getMaxVisitors());
         ps.setFloat(4, v.getPrice());
         ps.setInt(5, v.getCode());
+        ps.setString(6, v.getLanguage());
         ps.executeUpdate();
         ps.close();
     }
