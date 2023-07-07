@@ -115,6 +115,11 @@ class CuratorTest {
             assertEquals(a.getStatus(), ol.getStatus());
             Artwork retrieved3 = dao.get(a.getCode());
             assertEquals(retrieved3.getStatus(), a.getStatus());
+
+            c.modifyStatus(a, od);
+            assertEquals(a.getStatus(), od.getStatus());
+            Artwork retrieved4 = dao.get(a.getCode());
+            assertEquals(retrieved4.getStatus(), a.getStatus());
         } catch (SQLException | MessagingException e) {
             e.printStackTrace();
         } finally {
