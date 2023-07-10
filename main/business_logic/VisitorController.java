@@ -17,10 +17,10 @@ public class VisitorController {
         return bdao.getVisitorBookings(v);
     }
 
-    public void cancelBooking(int code) throws SQLException, ParseException {
+    public void cancelBooking(int code) throws Exception {
         BookingDAO dao = new BookingDAO();
         if (dao.get(code) == null) {
-            System.out.println("La prenotazione richiesta non è presente");
+            throw new Exception("La prenotazione richiesta non è presente");
         } else {
             dao.delete(code);
         }
@@ -33,12 +33,16 @@ public class VisitorController {
 
     public void SubscribeToNewsletter(Visitor v) throws SQLException {
         VisitorDAO vdao = new VisitorDAO();
-        vdao.setSubscriber(v);
+        if(vdao.get(v.getEmailAddress()) != null) {
+            vdao.setSubscriber(v);
+        }
     }
 
     public void UnsubscribeFromNewsletter(Visitor v) throws SQLException {
         VisitorDAO vdao = new VisitorDAO();
-        vdao.cancelSubscriber(v);
+        if(vdao.get(v.getEmailAddress()) != null) {
+            vdao.cancelSubscriber(v);
+        }
     }
 
     public void bookVisit(Visit v, Visitor vr, int code, int num_visitors) throws Exception {
