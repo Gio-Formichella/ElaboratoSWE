@@ -286,7 +286,7 @@ public class VisitorTest {
 
         ArtworkDAO adao = new ArtworkDAO();
         Artwork a = new Artwork(121, "Gioconda", "Leonardo da Vinci", new OnDisplay());
-        ArrayList<Artwork> artworks = new ArrayList<>();
+        ArrayList<Artwork> artworks;
         try {
             adao.insert(a);
             artworks = vc.viewArtworks();

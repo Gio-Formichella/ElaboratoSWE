@@ -19,8 +19,6 @@ import java.util.Properties;
 
 
 public class Curator {
-    private final String emailAddress = "museoswe@gmail.com";
-    private final String emailPassword = "usomdxtqjcwbdiid";
 
     public void addItinerary(int id, String name) throws SQLException {
         Itinerary i = new Itinerary(id, name, new ArrayList<>());
@@ -41,11 +39,11 @@ public class Curator {
         //notifica dei newsletter subscribers
         VisitorDAO vdao = new VisitorDAO();
         ArrayList<Visitor> nlsubscribers = vdao.getNLSubscribers();
-
+        Notifier notifier = Notifier.getInstance();
         //invio email
         if (nlsubscribers.size() > 0) {
             String messageToSend = "New artwork " + a.getName() + " of the author " + a.getAuthor() + " is now " + a.getStatus() + " in the " + i.getName() + " itinerary";
-            sendEmail(nlsubscribers, "New artwork", messageToSend);
+            notifier.sendEmail(nlsubscribers, "New artwork", messageToSend);
         }
     }
 
@@ -59,6 +57,7 @@ public class Curator {
         //se lo stato è lo stesso, nessun cambiamento
         //se lo stato da visibile passa a non visibile, notificati i visitatori interessati dalla modifica
         //se lo stato da non visibile passa a visibile notificati i newsletter subscriber
+        Notifier notifier = Notifier.getInstance();
         if (!Objects.equals(as.getStatus(), a.getStatus())) {
             if (a.getArtworkStatusObject().getClass() == OnDisplay.class) {
                 //opera passa ad uno stato non visibile
@@ -68,7 +67,7 @@ public class Curator {
                 //emailing ai visitatori
                 if (visitors.size() > 0) {
                     String messageToSend = "The artwork " + a.getName() + " of the author " + a.getAuthor() + " is now " + a.getStatus();
-                    sendEmail(visitors, "Change of artwork status", messageToSend);
+                    notifier.sendEmail(visitors, "Change of artwork status", messageToSend);
                 }
             } else if (as.getClass() == OnDisplay.class) {
                 //opera torna allo stato visibile
@@ -77,7 +76,7 @@ public class Curator {
                 //invio email
                 if (nlsubscribers.size() > 0) {
                     String messageToSend = "The artwork " + a.getName() + " of the author " + a.getAuthor() + " is now back on display !";
-                    sendEmail(nlsubscribers, "Change of artwork status", messageToSend);
+                    notifier.sendEmail(nlsubscribers, "Change of artwork status", messageToSend);
                 }
             }
             a.setStatus(as);
@@ -94,53 +93,5 @@ public class Curator {
             throw new RuntimeException("Itinerary in use");
     }
 
-    private void sendEmail(ArrayList<Visitor> toBeNotified, String subject, String messageToSend) throws MessagingException {
-        Properties properties = new Properties();
-        properties.put("mail.smtp.auth", "true");  //autenticazione user
-        properties.put("mail.smtp.host", "smtp.gmail.com");  //server smtp gmail
-        properties.put("mail.smtp.port", "587"); //numero di porta richiesto da gmail
-        properties.put("mail.smtp.starttls.enable", "true");
 
-        Session session = Session.getInstance(properties, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(emailAddress, emailPassword);
-            }
-        });
-
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(emailAddress));
-        message.setSubject(subject);
-        for (Visitor v : toBeNotified) {
-            Address addressTo = new InternetAddress(v.getEmailAddress());
-            message.addRecipient(Message.RecipientType.TO, addressTo);
-        }
-        message.setSubject(subject);
-
-        MimeMultipart multipart = new MimeMultipart("related");
-
-        //first part of the message
-        BodyPart messageBodyPart = new MimeBodyPart();
-        String htmlText = "<img src=\"cid:image\" alt=\"Museo di SWE\" style=\"width: 300px; height: 100px; \">\r\n" + //
-                "<h5 style=\"color: gray; font-family: Arial,sans-serif\">" + messageToSend + "</h5>\r\n" + //
-                "<div style=\"margin-top: 5em\">\r\n" + //
-                "  <p style=\"color: gray; font-family: Arial,sans-serif; font-size: 0.7em\">Contatti:</p>\r\n" + //
-                "  <p style=\"color: gray; font-family: Arial,sans-serif; font-size: 0.7em\">Telefono: 1234567890</p>\r\n" + //
-                "  <p style=\"color: gray; font-family: Arial,sans-serif; font-size: 0.7em\">Email: museoswe@gmail.com</p>\r\n" + //
-                "</div>";
-        messageBodyPart.setContent(htmlText, "text/html");
-        multipart.addBodyPart(messageBodyPart);
-
-        //second part of the message
-        messageBodyPart = new MimeBodyPart();
-        FileDataSource fds = new FileDataSource("imgs/logo.png");
-        messageBodyPart.setDataHandler(new DataHandler(fds));
-        messageBodyPart.setHeader("Content-ID", "<image>");
-        messageBodyPart.setFileName("logo.png");
-        multipart.addBodyPart(messageBodyPart);
-
-        message.setContent(multipart);
-
-        Transport.send(message);
-    }
 }
