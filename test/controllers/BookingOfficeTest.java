@@ -2,9 +2,13 @@ package test.controllers;
 
 import main.DomainModel.Itinerary;
 import main.DomainModel.Visit;
+import main.DomainModel.Visitor;
 import main.business_logic.BookingOffice;
+import main.business_logic.VisitorController;
 import main.orm.ItineraryDAO;
 import main.orm.VisitDAO;
+import main.orm.VisitorDAO;
+import main.orm.BookingDAO;
 import org.junit.Test;
 
 import javax.mail.MessagingException;
@@ -68,17 +72,27 @@ public class BookingOfficeTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary i = new Itinerary(1, "itinerary1", null);
         itineraries.add(i);
+        
+        
         try {
             ItineraryDAO iDao = new ItineraryDAO();
+            VisitDAO dao = new VisitDAO();
+            VisitorDAO vDao = new VisitorDAO();
+            Visitor v = vDao.get("michael.bartoloni@stud.unifi.it");
             iDao.insert(i);
             b.setVisit(code, date, time, maxVisitors, price, language, itineraries);
+            VisitorController vr = new VisitorController();
+            vr.bookVisit(dao.getTransitive(code), v, 1, 100 );
             b.cancelVisit(code);
-            VisitDAO dao = new VisitDAO();
             assertNull(dao.getTransitive(code));
-        } catch (SQLException | ParseException | MessagingException e) {
+            BookingDAO bDao = new BookingDAO();
+            assertNull(bDao.get(code));
+        } catch (Exception e) {
             e.printStackTrace();
         } finally{
             try {
+                BookingDAO bDao = new BookingDAO();
+                bDao.delete(1);
                 VisitDAO dao = new VisitDAO();
                 dao.delete(code);
                 ItineraryDAO iDao = new ItineraryDAO();

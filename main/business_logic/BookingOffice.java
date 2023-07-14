@@ -51,6 +51,9 @@ public class BookingOffice {
     }
 
     public void modifyVisit(Visit v) throws SQLException, MessagingException, ParseException {
+        if (v.getMaxVisitors()< 0 || v.getPrice() < 0) {
+            throw new SQLException("maxVisitors and price must be positive");
+        }
         VisitDAO dao = new VisitDAO();
         Visit vOld = dao.getTransitive(v.getCode());
         StringBuilder oldItinerariesMessage = new StringBuilder();
