@@ -19,7 +19,11 @@ import java.util.Properties;
 
 
 public class Curator {
+    private final Notifier notifier;
 
+    public Curator(){
+        notifier = Notifier.getInstance();
+    }
     public void addItinerary(int id, String name) throws SQLException {
         Itinerary i = new Itinerary(id, name, new ArrayList<>());
         ItineraryDAO dao = new ItineraryDAO();
@@ -39,7 +43,6 @@ public class Curator {
         //notifica dei newsletter subscribers
         VisitorDAO vdao = new VisitorDAO();
         ArrayList<Visitor> nlsubscribers = vdao.getNLSubscribers();
-        Notifier notifier = Notifier.getInstance();
         //invio email
         if (nlsubscribers.size() > 0) {
             String messageToSend = "New artwork " + a.getName() + " of the author " + a.getAuthor() + " is now " + a.getStatus() + " in the " + i.getName() + " itinerary";
@@ -57,7 +60,6 @@ public class Curator {
         //se lo stato è lo stesso, nessun cambiamento
         //se lo stato da visibile passa a non visibile, notificati i visitatori interessati dalla modifica
         //se lo stato da non visibile passa a visibile notificati i newsletter subscriber
-        Notifier notifier = Notifier.getInstance();
         if (!Objects.equals(as.getStatus(), a.getStatus())) {
             if (a.getArtworkStatusObject().getClass() == OnDisplay.class) {
                 //opera passa ad uno stato non visibile

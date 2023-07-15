@@ -21,7 +21,11 @@ import javax.mail.internet.MimeMultipart;
 
 
 public class BookingOffice {
+    private final Notifier notifier;
 
+    public BookingOffice(){
+        notifier = Notifier.getInstance();
+    }
 
     public void setVisit(int code, String date, String time, int maxVisitors, float price, String language, ArrayList<Itinerary> itineraries) throws SQLException, ParseException {
         if (maxVisitors < 0 || price < 0) {
@@ -38,7 +42,6 @@ public class BookingOffice {
         VisitorDAO vdao = new VisitorDAO();
         ArrayList<Visitor> toBeNotifiedVisitors = vdao.getToBeNotifiedVisitors(v);
         StringBuilder itinerariesMessage = new StringBuilder();
-        Notifier notifier = Notifier.getInstance();
         for (Itinerary i : v.getItineraries()) {
             itinerariesMessage.append(i.getName()).append(" ");
         }
@@ -57,7 +60,6 @@ public class BookingOffice {
         VisitDAO dao = new VisitDAO();
         Visit vOld = dao.getTransitive(v.getCode());
         StringBuilder oldItinerariesMessage = new StringBuilder();
-        Notifier notifier = Notifier.getInstance();
         for (Itinerary i : v.getItineraries()) {
             oldItinerariesMessage.append(i.getName()).append(" ");
         }
