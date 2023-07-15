@@ -5,6 +5,7 @@ import main.orm.*;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +36,7 @@ public class BookingDAOTest {
             dao.addBooking(visit, visitor, b_code, 5);
             dao.delete(b_code);
             assertNull(dao.get(b_code));
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -43,7 +44,7 @@ public class BookingDAOTest {
                 vidao.delete(visit.getCode());
                 idao.delete(it);
                 adao.delete(art);
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -76,7 +77,7 @@ public class BookingDAOTest {
             assertEquals(retrieved.get(0).getVisit().getCode(), visit.getCode());
             assertEquals(retrieved.get(0).getVisitor().getEmailAddress(), visitor.getEmailAddress());
             assertFalse(retrieved.get(0).isPaid());
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -117,7 +118,7 @@ public class BookingDAOTest {
             bdao.setPaid(b_code);
             Booking booking = bdao.get(b_code);
             assertTrue(booking.isPaid());
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -126,7 +127,7 @@ public class BookingDAOTest {
                 vidao.delete(visit.getCode());
                 idao.delete(it);
                 adao.delete(art);
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -162,7 +163,7 @@ public class BookingDAOTest {
             assertEquals(retrieved.getVisitor().getEmailAddress(), visitor.getEmailAddress());
             assertEquals(retrieved.getVisit().getCode(), visit.getCode());
             assertFalse(retrieved.isPaid());
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -210,7 +211,7 @@ public class BookingDAOTest {
             assertEquals(b_code, b.getCode());
             assertEquals(visit.getCode(), v.getCode());
             assertEquals(visitor.getEmailAddress(), vr.getEmailAddress());
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -219,7 +220,7 @@ public class BookingDAOTest {
                 vidao.delete(visit.getCode());
                 idao.delete(it);
                 adao.delete(art);
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }

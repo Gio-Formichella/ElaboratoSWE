@@ -43,7 +43,7 @@ public class VisitorTest {
             v.bookVisit(visit, visitor, b.getCode(), 4);
             v.cancelBooking(b.getCode());
             assertNull(bdao.get(b.getCode()));
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -51,7 +51,7 @@ public class VisitorTest {
                 vidao.delete(visit.getCode());
                 idao.delete(it);
                 adao.delete(art);
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -73,7 +73,7 @@ public class VisitorTest {
         } finally {
             try {
                 vdao.delete(visitor.getEmailAddress());
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -96,7 +96,7 @@ public class VisitorTest {
         } finally {
             try {
                 vdao.delete(visitor.getEmailAddress());
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
@@ -127,7 +127,7 @@ public class VisitorTest {
             vidao.insert(visit);
             vc.bookVisit(visit, visitor, b_code, 5);
             assertEquals(b_code, bdao.get(b_code).getCode());
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -136,7 +136,7 @@ public class VisitorTest {
                 vidao.delete(visit.getCode());
                 idao.delete(it);
                 adao.delete(art);
-            } catch (Exception e) {
+            } catch (SQLException | ParseException e) {
                 e.printStackTrace();
             }
         }
@@ -169,7 +169,7 @@ public class VisitorTest {
             vc.bookVisit(visit, visitor, b.getCode(), 5);
             vc.payFee(b.getCode());
             assertTrue(bdao.get(b.getCode()).isPaid());
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -178,7 +178,7 @@ public class VisitorTest {
                 vidao.delete(visit.getCode());
                 idao.delete(it);
                 adao.delete(art);
-            } catch (Exception e) {
+            } catch (SQLException | ParseException e) {
                 e.printStackTrace();
             }
         }
@@ -214,7 +214,7 @@ public class VisitorTest {
             assertEquals(retrieved.get(0).getVisit().getCode(), b.getVisit().getCode());
             assertEquals(retrieved.get(0).getVisitor().getEmailAddress(), b.getVisitor().getEmailAddress());
             assertEquals(retrieved.get(0).isPaid(), b.isPaid());
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -223,7 +223,7 @@ public class VisitorTest {
                 vidao.delete(visit.getCode());
                 idao.delete(it);
                 adao.delete(art);
-            } catch (Exception e) {
+            } catch (SQLException | ParseException e) {
                 e.printStackTrace();
             }
         }
@@ -265,7 +265,7 @@ public class VisitorTest {
             assertEquals(b.getCode(), b_test.getCode());
             assertEquals(visit.getCode(), v_test.getCode());
             assertEquals(visitor.getEmailAddress(), vr_test.getEmailAddress());
-        } catch (Exception e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -274,7 +274,7 @@ public class VisitorTest {
                 vidao.delete(visit.getCode());
                 idao.delete(it);
                 adao.delete(art);
-            } catch (Exception e) {
+            } catch (SQLException | ParseException e) {
                 e.printStackTrace();
             }
         }
@@ -293,12 +293,12 @@ public class VisitorTest {
             assertEquals(a.getCode(), artworks.get(artworks.size() - 1).getCode());
             assertEquals(a.getName(), artworks.get(artworks.size() - 1).getName());
             assertEquals(a.getAuthor(), artworks.get(artworks.size() - 1).getAuthor());
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
                 adao.delete(a);
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }

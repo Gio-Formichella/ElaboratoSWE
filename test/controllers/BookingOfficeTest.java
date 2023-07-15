@@ -61,7 +61,7 @@ public class BookingOfficeTest {
     }
 
     @Test
-    public void cancelVisit(){
+    public void cancelVisit() throws SQLException, ParseException, MessagingException {
         BookingOffice b = new BookingOffice();
         int code = 1;
         String date = "2020-01-01";
@@ -87,7 +87,7 @@ public class BookingOfficeTest {
             assertNull(dao.getTransitive(code));
             BookingDAO bDao = new BookingDAO();
             assertNull(bDao.get(code));
-        } catch (Exception e) {
+        } catch (SQLException | ParseException | MessagingException e) {
             e.printStackTrace();
         } finally{
             try {
