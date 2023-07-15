@@ -46,7 +46,7 @@ public class BookingOffice {
         dao.delete(code);
         //invio email
         if (toBeNotifiedVisitors.size() > 0) {
-            notifier.sendEmail(toBeNotifiedVisitors, "Visit has been canceld", messageToSend);
+            notifier.sendEmail(toBeNotifiedVisitors, "Visit has been cancelled", messageToSend);
         }
     }
 
