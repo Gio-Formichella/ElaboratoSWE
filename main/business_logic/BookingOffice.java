@@ -28,7 +28,7 @@ public class BookingOffice {
     }
 
     public void setVisit(int code, String date, String time, int maxVisitors, float price, String language, ArrayList<Itinerary> itineraries) throws SQLException, ParseException {
-        if (maxVisitors < 0 || price < 0) {
+        if (maxVisitors <= 0 || price < 0) {
             throw new SQLException("maxVisitors and price must be positive");
         }
         VisitDAO dao = new VisitDAO();
@@ -54,7 +54,7 @@ public class BookingOffice {
     }
 
     public void modifyVisit(Visit v) throws SQLException, MessagingException, ParseException {
-        if (v.getMaxVisitors()< 0 || v.getPrice() < 0) {
+        if (v.getMaxVisitors()<= 0 || v.getPrice() < 0) {
             throw new SQLException("maxVisitors and price must be positive");
         }
         VisitDAO dao = new VisitDAO();
