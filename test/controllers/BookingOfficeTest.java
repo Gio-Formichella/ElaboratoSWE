@@ -167,11 +167,11 @@ public class BookingOfficeTest {
             VisitDAO dao= new VisitDAO();
             ItineraryDAO iDao = new ItineraryDAO();
             iDao.insert(i);
+            dao.insert(new Visit(code, date, time, maxVisitors, price, language, itineraries));
             VisitorDAO vDao = new VisitorDAO();
             Visitor vr = vDao.get("michael.bartoloni@stud.unifi.it");
-            VisitorController vc = new VisitorController();
-            b.setVisit(code, date, time, maxVisitors, price, language, itineraries);
-            vc.bookVisit(dao.getTransitive(code), vr, 1, 100);
+            BookingDAO bDao = new BookingDAO();
+            bDao.addBooking(dao.getTransitive(code), vr, 1, 100);
             String date2 = "2020-01-31";
             String time2 = "11:00:00";
             int maxVisitors2 = 200;
@@ -192,6 +192,8 @@ public class BookingOfficeTest {
                 dao.delete(code);
                 ItineraryDAO iDao = new ItineraryDAO();
                 iDao.delete(i);
+                BookingDAO bDao = new BookingDAO();
+                bDao.delete(1);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -235,6 +237,35 @@ public class BookingOfficeTest {
                 dao.delete(code);
                 ItineraryDAO iDao = new ItineraryDAO();
                 iDao.delete(i);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    public void viewVisits() {
+        BookingOffice b = new BookingOffice();
+
+        try {
+            VisitDAO dao = new VisitDAO();
+            ItineraryDAO iDao = new ItineraryDAO();
+            Itinerary i = new Itinerary(1, "itinerary1", null);
+            iDao.insert(i);
+            ArrayList<Itinerary> itineraries = new ArrayList<>();
+            itineraries.add(i);
+            Visit v = new Visit(1, "2020-01-01", "10:00:00", 100, 10, "Italiano", itineraries);
+            dao.insert(v);
+            ArrayList<Visit> visits = b.viewVisits();
+            assertNotEquals(visits.size(), 0);
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                VisitDAO dao = new VisitDAO();
+                dao.delete(1);
+                ItineraryDAO iDao = new ItineraryDAO();
+                iDao.delete(iDao.getTransitive(1));
             } catch (SQLException e) {
                 e.printStackTrace();
             }

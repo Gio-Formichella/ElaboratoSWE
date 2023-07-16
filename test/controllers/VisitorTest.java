@@ -12,8 +12,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VisitorTest {
     @Test
@@ -55,6 +54,12 @@ public class VisitorTest {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Test
+    public void cancelNonExistingBooking(){
+        VisitorController v = new VisitorController();
+        assertThrows(SQLException.class, () -> v.cancelBooking(999));
     }
 
     @Test
