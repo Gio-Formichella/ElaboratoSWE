@@ -248,27 +248,16 @@ public class BookingOfficeTest {
         BookingOffice b = new BookingOffice();
 
         try {
-            VisitDAO dao = new VisitDAO();
-            ItineraryDAO iDao = new ItineraryDAO();
-            Itinerary i = new Itinerary(1, "itinerary1", null);
-            iDao.insert(i);
-            ArrayList<Itinerary> itineraries = new ArrayList<>();
-            itineraries.add(i);
-            Visit v = new Visit(1, "2020-01-01", "10:00:00", 100, 10, "Italiano", itineraries);
-            dao.insert(v);
             ArrayList<Visit> visits = b.viewVisits();
             assertNotEquals(visits.size(), 0);
+            assertEquals(visits.get(0).getCode(), 485);
+            assertEquals(visits.get(0).getDate(), "2022-11-11");
+            assertEquals(visits.get(0).getTime(), "10:23:45");
+            assertEquals(visits.get(0).getMaxVisitors(), 100);
+            assertEquals(visits.get(0).getPrice(), 230.25);
+            assertEquals(visits.get(0).getLanguage(), "Italiano");
         } catch (SQLException | ParseException e) {
             e.printStackTrace();
-        }finally{
-            try {
-                VisitDAO dao = new VisitDAO();
-                dao.delete(1);
-                ItineraryDAO iDao = new ItineraryDAO();
-                iDao.delete(iDao.getTransitive(1));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 }
