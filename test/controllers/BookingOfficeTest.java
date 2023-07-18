@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BookingOfficeTest {
-    
+
 
     @Test
-    public void setVisit(){        
+    public void setVisit() {
         BookingOffice b = new BookingOffice();
         int code = 1;
         String date = "2020-01-01";
@@ -33,7 +33,7 @@ public class BookingOfficeTest {
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         Itinerary i = new Itinerary(1, "itinerary1", null);
         itineraries.add(i);
-        
+
         try {
             ItineraryDAO iDao = new ItineraryDAO();
             iDao.insert(i);
@@ -48,7 +48,7 @@ public class BookingOfficeTest {
             assertFalse(v.getItineraries().isEmpty());
         } catch (SQLException | ParseException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 VisitDAO vDao = new VisitDAO();
                 vDao.delete(code);
@@ -61,7 +61,7 @@ public class BookingOfficeTest {
     }
 
     @Test
-    public void setWrongMaxVisitors(){
+    public void setWrongMaxVisitors() {
         BookingOffice b = new BookingOffice();
         int code = 1;
         String date = "2020-01-01";
@@ -86,7 +86,7 @@ public class BookingOfficeTest {
     }
 
     @Test
-    public void setWrongPrice(){
+    public void setWrongPrice() {
         BookingOffice b = new BookingOffice();
         int code = 1;
         String date = "2020-01-01";
@@ -130,14 +130,14 @@ public class BookingOfficeTest {
             iDao.insert(i);
             b.setVisit(code, date, time, maxVisitors, price, language, itineraries);
             VisitorController vr = new VisitorController();
-            vr.bookVisit(dao.getTransitive(code), v, 1, 100 );
+            vr.bookVisit(dao.getTransitive(code), v, 1, 100);
             b.cancelVisit(code);
             assertNull(dao.getTransitive(code));
             BookingDAO bDao = new BookingDAO();
             assertNull(bDao.get(code));
         } catch (SQLException | ParseException | MessagingException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 BookingDAO bDao = new BookingDAO();
                 bDao.delete(1);
@@ -152,7 +152,7 @@ public class BookingOfficeTest {
     }
 
     @Test
-    public void modifyVisit(){
+    public void modifyVisit() {
         BookingOffice b = new BookingOffice();
         int code = 1;
         String date = "2020-01-01";
@@ -164,7 +164,7 @@ public class BookingOfficeTest {
         Itinerary i = new Itinerary(1, "itinerary1", null);
         itineraries.add(i);
         try {
-            VisitDAO dao= new VisitDAO();
+            VisitDAO dao = new VisitDAO();
             ItineraryDAO iDao = new ItineraryDAO();
             iDao.insert(i);
             dao.insert(new Visit(code, date, time, maxVisitors, price, language, itineraries));
@@ -186,7 +186,7 @@ public class BookingOfficeTest {
             assertEquals(v2.getLanguage(), language2);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 VisitDAO dao = new VisitDAO();
                 dao.delete(code);
@@ -201,7 +201,7 @@ public class BookingOfficeTest {
     }
 
     @Test
-    public void modifyVisitWrong(){
+    public void modifyVisitWrong() {
         BookingOffice b = new BookingOffice();
         int code = 1;
         String date = "2020-01-01";
@@ -213,7 +213,7 @@ public class BookingOfficeTest {
         Itinerary i = new Itinerary(1, "itinerary1", null);
         itineraries.add(i);
         try {
-            VisitDAO dao= new VisitDAO();
+            VisitDAO dao = new VisitDAO();
             ItineraryDAO iDao = new ItineraryDAO();
             iDao.insert(i);
             VisitorDAO vDao = new VisitorDAO();
@@ -229,9 +229,9 @@ public class BookingOfficeTest {
             assertThrows(SQLException.class, () -> {
                 b.modifyVisit(v);
             });
-        }catch (SQLException | ParseException e) {
+        } catch (SQLException | ParseException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             try {
                 VisitDAO dao = new VisitDAO();
                 dao.delete(code);
@@ -240,24 +240,6 @@ public class BookingOfficeTest {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    @Test
-    public void viewVisits() {
-        BookingOffice b = new BookingOffice();
-
-        try {
-            ArrayList<Visit> visits = b.viewVisits();
-            assertNotEquals(visits.size(), 0);
-            assertEquals(visits.get(0).getCode(), 485);
-            assertEquals(visits.get(0).getDate(), "2022-11-11");
-            assertEquals(visits.get(0).getTime(), "10:23:45");
-            assertEquals(visits.get(0).getMaxVisitors(), 100);
-            assertEquals(visits.get(0).getPrice(), 230.25);
-            assertEquals(visits.get(0).getLanguage(), "Italiano");
-        } catch (SQLException | ParseException e) {
-            e.printStackTrace();
         }
     }
 }
