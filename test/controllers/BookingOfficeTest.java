@@ -61,7 +61,7 @@ public class BookingOfficeTest {
     }
 
     @Test
-    public void setWrongVisitors(){
+    public void setWrongMaxVisitors(){
         BookingOffice b = new BookingOffice();
         int code = 1;
         String date = "2020-01-01";
@@ -111,7 +111,7 @@ public class BookingOfficeTest {
     }
 
     @Test
-    public void cancelVisit() throws SQLException, ParseException, MessagingException {
+    public void cancelVisit() {
         BookingOffice b = new BookingOffice();
         int code = 1;
         String date = "2020-01-01";
