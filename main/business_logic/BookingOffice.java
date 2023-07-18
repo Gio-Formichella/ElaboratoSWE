@@ -21,10 +21,14 @@ import javax.mail.internet.MimeMultipart;
 
 
 public class BookingOffice {
+    private final Notifier notifier;
 
+    public BookingOffice(){
+        notifier = Notifier.getInstance();
+    }
 
     public void setVisit(int code, String date, String time, int maxVisitors, float price, String language, ArrayList<Itinerary> itineraries) throws SQLException, ParseException {
-        if (maxVisitors < 0 || price < 0) {
+        if (maxVisitors <= 0 || price < 0) {
             throw new SQLException("maxVisitors and price must be positive");
         }
         VisitDAO dao = new VisitDAO();
@@ -38,7 +42,6 @@ public class BookingOffice {
         VisitorDAO vdao = new VisitorDAO();
         ArrayList<Visitor> toBeNotifiedVisitors = vdao.getToBeNotifiedVisitors(v);
         StringBuilder itinerariesMessage = new StringBuilder();
-        Notifier notifier = Notifier.getInstance();
         for (Itinerary i : v.getItineraries()) {
             itinerariesMessage.append(i.getName()).append(" ");
         }
@@ -46,15 +49,17 @@ public class BookingOffice {
         dao.delete(code);
         //invio email
         if (toBeNotifiedVisitors.size() > 0) {
-            notifier.sendEmail(toBeNotifiedVisitors, "Visit has been canceld", messageToSend);
+            notifier.sendEmail(toBeNotifiedVisitors, "Visit has been cancelled", messageToSend);
         }
     }
 
     public void modifyVisit(Visit v) throws SQLException, MessagingException, ParseException {
+        if (v.getMaxVisitors()<= 0 || v.getPrice() < 0) {
+            throw new SQLException("maxVisitors and price must be positive");
+        }
         VisitDAO dao = new VisitDAO();
         Visit vOld = dao.getTransitive(v.getCode());
         StringBuilder oldItinerariesMessage = new StringBuilder();
-        Notifier notifier = Notifier.getInstance();
         for (Itinerary i : v.getItineraries()) {
             oldItinerariesMessage.append(i.getName()).append(" ");
         }

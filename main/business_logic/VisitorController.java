@@ -6,6 +6,7 @@ import main.orm.BookingDAO;
 import main.orm.VisitDAO;
 import main.orm.VisitorDAO;
 
+import javax.mail.MessagingException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -17,10 +18,10 @@ public class VisitorController {
         return bdao.getVisitorBookings(v);
     }
 
-    public void cancelBooking(int code) throws Exception {
+    public void cancelBooking(int code) throws SQLException, ParseException {
         BookingDAO dao = new BookingDAO();
         if (dao.get(code) == null) {
-            throw new Exception("La prenotazione richiesta non è presente");
+            throw new SQLException("La prenotazione richiesta non è presente");
         } else {
             dao.delete(code);
         }
@@ -45,7 +46,7 @@ public class VisitorController {
         }
     }
 
-    public void bookVisit(Visit v, Visitor vr, int code, int num_visitors) throws Exception {
+    public void bookVisit(Visit v, Visitor vr, int code, int num_visitors) throws SQLException, ParseException {
         VisitDAO vdao = new VisitDAO();
         BookingDAO bdao = new BookingDAO();
         int booked_tickets = vdao.getBookedTickets(v);
@@ -53,10 +54,10 @@ public class VisitorController {
             if (bdao.get(code) == null && v.getMaxVisitors() >= (booked_tickets + num_visitors)) {
                 bdao.addBooking(v, vr, code, num_visitors);
             } else {
-                throw new Exception("Non ci sono posti liberi oppure la prenotazione è già esistente");
+                throw new SQLException("Non ci sono posti liberi oppure la prenotazione è già esistente");
             }
         } else {
-            throw new Exception("Il numero di visitatori non è corretto");
+            throw new SQLException("Il numero di visitatori non è corretto");
         }
 
     }

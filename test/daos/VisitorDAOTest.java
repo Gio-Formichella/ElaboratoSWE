@@ -63,7 +63,7 @@ class VisitorDAOTest {
         } finally {
             try {
                 vdao.cancelSubscriber(visitorFalse);
-            } catch (Exception e){
+            } catch (SQLException e){
                 e.printStackTrace();
             }
         }
@@ -95,7 +95,7 @@ class VisitorDAOTest {
             assertEquals(v.getName(), visitor.getName());
             assertEquals(v.getSurname(), visitor.getSurname());
             assertEquals(v.isNLSubscriber(), visitor.isNLSubscriber());
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -114,7 +114,7 @@ class VisitorDAOTest {
             vdao.insert(v);
             vdao.delete(v.getEmailAddress());
             assertNull(vdao.get(v.getEmailAddress()));
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

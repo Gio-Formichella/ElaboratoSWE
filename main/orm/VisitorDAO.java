@@ -46,7 +46,7 @@ public class VisitorDAO {
             String name = rs.getString("name");
             String surname = rs.getString("surname");
             boolean subscriber = rs.getBoolean("newsletter");
-            visitors.add(new Visitor(email, name, surname, subscriber));
+            visitors.add(new Visitor(name, surname, email, subscriber));
         }
         return visitors;
     }
@@ -67,7 +67,7 @@ public class VisitorDAO {
             String name = rs.getString("name");
             String surname = rs.getString("surname");
             boolean subscriber = rs.getBoolean("newsletter");
-            visitors.add(new Visitor(email, name, surname, subscriber));
+            visitors.add(new Visitor(name, surname, email, subscriber));
         }
         return visitors;
     }

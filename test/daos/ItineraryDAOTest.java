@@ -151,7 +151,7 @@ public class ItineraryDAOTest {
         VisitDAO vdao = new VisitDAO();
         ArrayList<Itinerary> itineraries = new ArrayList<>();
         itineraries.add(i1);
-        Visit v = new Visit(-1, "2020-12-12", "12:00:00", 0, 0, "Italiano", itineraries);
+        Visit v = new Visit(-1, "2020-12-12", "12:00:00", 100, 0, "Italiano", itineraries);
 
         ItineraryDAO idao = new ItineraryDAO();
         try {
